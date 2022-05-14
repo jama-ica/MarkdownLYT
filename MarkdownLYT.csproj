@@ -44,15 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\FileReplacer.cs" />
-    <Compile Include="src\LYTFile.cs" />
+    <Compile Include="src\workspace\LYTFile.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Setting.cs" />
-    <Compile Include="src\Tag.cs" />
-    <Compile Include="src\TagReader.cs" />
+    <Compile Include="src\setting\SettingInfo.cs" />
+    <Compile Include="src\tag\TagInfo.cs" />
+    <Compile Include="src\tag\TagReader.cs" />
+    <Compile Include="src\workspace\WorkSpace.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\moc\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

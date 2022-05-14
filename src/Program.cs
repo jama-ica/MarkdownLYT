@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarkdownLYT.src;
+using MarkdownLYT.Setting;
 
 namespace MarkdownLYT
 {
@@ -11,7 +11,12 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Setting setting = new Setting();
+			var setting = new SettingInfo();
+
+			var workSpace = new WorkSpace();
+
+			workSpace.Load(@"C:\Users\jama-\source\repos\MarkdownLYT\test");
+
 
 
 

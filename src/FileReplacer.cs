@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarkdownLYT.src
+namespace MarkdownLYT
 {
 	internal class FileReplacer
 	{

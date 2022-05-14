@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarkdownLYT.src
+namespace MarkdownLYT.Setting
 {
-	internal class LYTFile
+	internal class SettingInfo
 	{
-
+		public string WorkPlace { get; set; }
 	}
 }
