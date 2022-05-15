@@ -41,9 +41,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>packages\YamlDotNet.11.2.1\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\debug\Debug.cs" />
+    <Compile Include="src\Define.cs" />
     <Compile Include="src\FileReplacer.cs" />
+    <Compile Include="src\home\HomeFile.cs" />
+    <Compile Include="src\moc\MocFile.cs" />
+    <Compile Include="src\tag\AllTagInfo.cs" />
+    <Compile Include="src\tag\AllTagsFile.cs" />
     <Compile Include="src\workspace\LYTFile.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -51,12 +60,12 @@
     <Compile Include="src\tag\TagInfo.cs" />
     <Compile Include="src\tag\TagReader.cs" />
     <Compile Include="src\workspace\WorkSpace.cs" />
+    <Compile Include="src\workspace\WorkSpaceSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\moc\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

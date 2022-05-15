@@ -38,7 +38,7 @@ namespace MarkdownLYT.Tag
 				{
 					string lineText = sreader.ReadLine();
 
-					var tag = ConvertToTagFrom(lineText);
+					var tag = ConvertTagFrom(lineText);
 					tags.Add(tag);
 					lineNo++;
 
