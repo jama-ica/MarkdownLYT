@@ -56,7 +56,8 @@ namespace MarkdownLYT.Tag
 		static TagInfo ConvertTagFrom(string text)
 		{
 			//TODO
-			var b = text.StartsWith("#", System.StringComparison.Ordinal);
+			var deserializer = new YamlDotNet.Serialization.Deserializer();
+			var a = deserializer.Deserialize<TagObject>(text);
 
 			return new TagInfo("");
 		}
