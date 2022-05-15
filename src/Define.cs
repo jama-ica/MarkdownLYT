@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT
 {
-	internal class SettingInfo
+	internal class Define
 	{
-		public string WorkPlace { get; set; }
+		public static readonly int LEYER_TOP_LEVEL = 1;
 	}
 }

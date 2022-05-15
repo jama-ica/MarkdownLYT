@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT
 {
-	internal class SettingInfo
+	internal class WorkSpaceSetting
 	{
-		public string WorkPlace { get; set; }
 	}
 }

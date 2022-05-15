@@ -11,12 +11,12 @@ namespace MarkdownLYT
 	internal class LYTFile
 	{
 		FileInfo file;
-		List<TagInfo> tags;
+		public List<TagInfo> tags { get; }
 
 		public LYTFile()
 		{
 			this.file = null;
-			this.tags = null;
+			this.tags = new List<TagInfo>();
 		}
 
 		public void Load(string path)
@@ -36,9 +36,13 @@ namespace MarkdownLYT
 			LoadTag(this.file);
 		}
 
-		public void LoadTag(FileInfo file)
+		void LoadTag(FileInfo file)
 		{
-			this.tags = TagReader.Read(file);
+			var tags = TagReader.Read(file);
+			foreach (var tag in tags)
+			{
+				this.tags.Add(tag);
+			}
 		}
 
 	}

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarkdownLYT
+namespace MarkdownLYT.Moc
 {
-	internal class SettingInfo
+	internal class MocFile
 	{
-		public string WorkPlace { get; set; }
 	}
 }

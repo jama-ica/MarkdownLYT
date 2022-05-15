@@ -53,7 +53,7 @@ namespace MarkdownLYT.Tag
 			return tags;
 		}
 
-		static TagInfo ConvertToTagFrom(string text)
+		static TagInfo ConvertTagFrom(string text)
 		{
 			//TODO
 			var b = text.StartsWith("#", System.StringComparison.Ordinal);
