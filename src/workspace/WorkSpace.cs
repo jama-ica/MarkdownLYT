@@ -51,9 +51,9 @@ namespace MarkdownLYT
 
 		}
 
-		public List<TagInfo> GetAllTags()
+		public List<Tag.Tag> GetAllTags()
 		{
-			var allTags = new List<TagInfo>();
+			var allTags = new List<Tag.Tag>();
 
 			foreach(var lytFile in this.lytFiles )
 			{
@@ -76,6 +76,10 @@ namespace MarkdownLYT
 		{
 			var homeFile = new HomeFile(path + @"\home.md");
 			homeFile.UpdateFile(GetAllTags());
+		}
+
+		public void UpsateTagFile()
+		{
 		}
 	}
 }

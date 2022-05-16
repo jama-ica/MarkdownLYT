@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT.Tag
 {
-	internal class TagInfo : IEqualityComparer<TagInfo>
+	internal class Tag : IEqualityComparer<Tag>
 	{
 		public string text { get; }
 
-		public TagInfo(string text)
+		public Tag(string text)
 		{
 			this.text = text;
 		}
@@ -35,12 +35,12 @@ namespace MarkdownLYT.Tag
 			return sb.ToString();
 		}
 
-		public bool Equals(TagInfo x, TagInfo y)
+		public bool Equals(Tag x, Tag y)
 		{
 			return x.text == y.text;
 		}
 
-		public int GetHashCode(TagInfo obj)
+		public int GetHashCode(Tag obj)
 		{
 			return obj.text.GetHashCode();
 		}

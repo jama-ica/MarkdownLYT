@@ -16,7 +16,7 @@ namespace MarkdownLYT.Tag
 			this.path = path;
 		}
 
-		public void UpdateFile(List<TagInfo> tags)
+		public void UpdateFile(List<Tag> tags)
 		{
 			using (var sw = new StreamWriter(path, append:false, Encoding.UTF8))
 			{

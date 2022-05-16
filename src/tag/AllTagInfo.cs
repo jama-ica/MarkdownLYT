@@ -8,14 +8,14 @@ namespace MarkdownLYT.Tag
 {
 	internal class AllTagInfo
 	{
-		public List<TagInfo> tags { get; }
+		public List<Tag> tags { get; }
 
 		public AllTagInfo()
 		{
-			this.tags = new List<TagInfo>();
+			this.tags = new List<Tag>();
 		}
 
-		public void AddTag(TagInfo tag)
+		public void AddTag(Tag tag)
 		{
 			if (this.tags.Contains(tag))
 			{

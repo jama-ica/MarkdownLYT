@@ -8,7 +8,12 @@ namespace MarkdownLYT.Tag
 {
 	internal class TagObject
 	{
-		public string[] Tag { get; set; }
-		public string[] Tags { get; set; }
+		public string[] tag { get; set; }
 	}
+
+	internal class TagsObject
+	{
+		public string[] tags { get; set; }
+	}
+
 }

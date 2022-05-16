@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\breadcrumbTrail\BreadcrumbTrail.cs" />
     <Compile Include="src\debug\Debug.cs" />
     <Compile Include="src\Define.cs" />
     <Compile Include="src\FileReplacer.cs" />
@@ -58,7 +60,7 @@
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\setting\SettingInfo.cs" />
-    <Compile Include="src\tag\TagInfo.cs" />
+    <Compile Include="src\tag\Tag.cs" />
     <Compile Include="src\tag\TagReader.cs" />
     <Compile Include="src\workspace\WorkSpace.cs" />
     <Compile Include="src\workspace\WorkSpaceSetting.cs" />

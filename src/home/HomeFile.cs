@@ -17,11 +17,12 @@ namespace MarkdownLYT.Home
 			this.path = path;
 		}
 
-		public void UpdateFile(List<TagInfo> tags)
+		public void UpdateFile(List<Tag.Tag> tags)
 		{
-			//if(!File.Exists(path))
-			//{
-			//}
+			if (!File.Exists(path))
+			{
+				throw new FileNotFoundException(path);
+			}
 
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
 			{
