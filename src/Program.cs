@@ -17,8 +17,8 @@ namespace MarkdownLYT
 			var workSpace = new WorkSpace();
 
 			// Workspace内のファイルをロード
-			//workSpace.Load(@"C:\Users\jama-\source\repos\MarkdownLYT\test"); // for Desktop
-			workSpace.Load(@"C:\Users\jama\Project\MarkdownLYT\test"); // for Dell XPS13
+			workSpace.Load(@"C:\Users\jama-\source\repos\MarkdownLYT\test"); // for Desktop
+			//workSpace.Load(@"C:\Users\jama\Project\MarkdownLYT\test"); // for Dell XPS13
 
 		 // 全文章のタグを読み込んで、タグファイルを更新
 		 var allTags = workSpace.GetAllTags();

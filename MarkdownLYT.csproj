@@ -55,6 +55,7 @@
     <Compile Include="src\moc\MocFile.cs" />
     <Compile Include="src\tag\AllTagInfo.cs" />
     <Compile Include="src\tag\AllTagsFile.cs" />
+    <Compile Include="src\tag\TagInfo.cs" />
     <Compile Include="src\tag\TagObject.cs" />
     <Compile Include="src\workspace\LYTFile.cs" />
     <Compile Include="src\Program.cs" />

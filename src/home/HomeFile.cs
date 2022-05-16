@@ -17,7 +17,7 @@ namespace MarkdownLYT.Home
 			this.path = path;
 		}
 
-		public void UpdateFile(List<Tag.Tag> tags)
+		public void UpdateFile(List<TagInfo> tagInfos)
 		{
 			if (!File.Exists(path))
 			{
@@ -29,16 +29,25 @@ namespace MarkdownLYT.Home
 				sw.WriteLine("# Home");
 				sw.WriteLine();
 
-				foreach (var tag in tags)
+				foreach (var tagInfo in tagInfos)
 				{
-					int layerLevel = tag.GetLayers().Count;
-					if (layerLevel != Define.LEYER_TOP_LEVEL)
-					{
-						continue;
-					}
+					var layers = tagInfo.tag.GetLayers();
 
-					sw.WriteLine("# " + tag.text);
+					sw.WriteLine("# " + tagInfo.tag.text);
 					sw.WriteLine();
+
+					if ( Define.LEYER_TOP_LEVEL < layers.Count 
+						|| 3 <= tagInfo.lytFiles.Count)
+					{
+						//TODO add moc link
+					}
+					else
+					{
+						foreach (var lytFile in tagInfo.lytFiles)
+						{ 
+							//TODO add link to this file
+						}
+					}
 
 				}
 			}

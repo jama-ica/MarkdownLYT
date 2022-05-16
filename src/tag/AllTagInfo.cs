@@ -8,21 +8,21 @@ namespace MarkdownLYT.Tag
 {
 	internal class AllTagInfo
 	{
-		public List<Tag> tags { get; }
+		public List<TagInfo> tagInfos { get; }
 
 		public AllTagInfo()
 		{
-			this.tags = new List<Tag>();
+			this.tagInfos = new List<TagInfo>();
 		}
 
-		public void AddTag(Tag tag)
+		public void AddTagInfo(TagInfo tagInfo)
 		{
-			if (this.tags.Contains(tag))
+			if (this.tagInfos.Contains(tagInfo))
 			{
 				return;
 			}
 
-			this.tags.Add(tag);
+			this.tagInfos.Add(tagInfo);
 
 			//var layers = tag.GetLayers();
 			//for (int i = 1; i < layers.Count; i++)
@@ -39,9 +39,9 @@ namespace MarkdownLYT.Tag
 
 		bool Exist(string text)
 		{
-			foreach (var tag in this.tags)
+			foreach (var tagInfo in this.tagInfos)
 			{
-				if (tag.text == text)
+				if (tagInfo.tag.text == text)
 				{
 					return true;
 				}
