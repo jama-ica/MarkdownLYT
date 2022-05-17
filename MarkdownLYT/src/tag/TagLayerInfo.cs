@@ -15,11 +15,6 @@ namespace MarkdownLYT.Tag
 
 		public List<LYTFile> lytFiles { get; }
 
-		public TagLayerInfo()
-			: this("", null)
-		{
-			// this is root
-		}
 
 		public TagLayerInfo(string name, TagLayerInfo parent)
 		{
@@ -34,14 +29,11 @@ namespace MarkdownLYT.Tag
 			this.chilidren.Add(tagLayerInfo);
 		}
 
-		public void AddLytFile(LYTFile lytFile)
-		{
-			this.lytFiles.Add(lytFile);
-		}
 
-		public bool IsRoot()
+
+		public virtual bool IsRoot()
 		{
-			return this.parent == null;	
+			return false;
 		}
 	}
 }

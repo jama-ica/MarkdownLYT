@@ -55,7 +55,7 @@ namespace MarkdownLYT.Tag
 			for (int i = 0; i < layerLevel; i++)
 			{
 				sb.Append(layers[i]);
-				if(i + 1 < layerLevel)
+				if(i + 1 >= layerLevel)
 				{
 					sb.Append('/');
 				}
