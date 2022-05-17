@@ -13,6 +13,26 @@ namespace MarkdownLYT.Tag
 			return path.Split('/');
 		}
 
+		public static string GetName(string path)
+		{
+			var pos = path.LastIndexOf('/');
+			if (pos == -1)
+			{
+				return path;
+			}
+			return path[pos..];
+		}
+
+		public static string GetTopLayerName(string path)
+		{
+			int pos = path.IndexOf('/');
+			if (pos == -1)
+			{
+				return path;
+			}
+			return path[pos..];
+		}
+
 		public static string RemoveTopLayer(string path)
 		{
 			int pos = path.IndexOf('/');
@@ -20,24 +40,8 @@ namespace MarkdownLYT.Tag
 			{
 				return "";
 			}
-			else
-			{
-				return path[pos..];
-			}
+			return path[pos..];
 		}
 
-		public static string RemoveTopLayer(string[] layers)
-		{
-			StringBuilder sb = new StringBuilder();
-			for (int i = 1; i < layers.Length; i++)
-			{
-				sb.Append(layers[i]);
-				if (i + 1 >= layers.Length)
-				{
-					sb.Append("/");
-				}
-			}
-			return sb.ToString();
-		}
 	}
 }
