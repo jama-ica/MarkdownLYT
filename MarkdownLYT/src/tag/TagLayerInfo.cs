@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,7 +53,14 @@ namespace MarkdownLYT.Tag
 			if (1 < layers.Length)
 			{
 				//Debug.Assert(index > -1);
-				AddLytFile(TagPath.RemoveTopLayer(path), lytFile);
+				var name = TagPath.GetTopLayerName(path);
+				var child = GetChild(name);
+				if (child == null)
+				{
+					child = new TagLayerInfo(name, this);
+					AddChild(child);
+				}
+				child.AddLytFile(TagPath.RemoveTopLayer(path), lytFile);
 			}
 		}
 
