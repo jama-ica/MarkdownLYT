@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,11 +19,10 @@ namespace MarkdownLYT.Home
 
 		public void UpdateFile(TagLayerInfo rootTagLayer)
 		{
-			if (!File.Exists(path))
+			if (!File.Exists(this.path))
 			{
-				throw new FileNotFoundException(path);
+				throw new FileNotFoundException(this.path);
 			}
-
 
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
 			{
@@ -36,18 +35,22 @@ namespace MarkdownLYT.Home
 					sw.WriteLine("# " + tagLayer.name);
 					sw.WriteLine();
 
-					if ( 3 <= tagLayer.chilidren.Count)
+					if ( 0 < tagLayer.chilidren.Count)
 					{
-						//TODO add moc link
+						// add moc link
+						foreach (var child in tagLayer.chilidren)
+						{
+							$"[{child.name}](./{child.name}/{child.name}.md)";
+						}
 					}
 					else
 					{
-						//TODO add files link
-						foreach (var lytFile in tagLayer.chilidren.)
-						{ 
+						// add files link
+						foreach (var lytFile in tagLayer.lytFiles)
+						{
+							$"[{lytFile.name}]({lytFile.fullPath})";
 						}
 					}
-
 				}
 			}
 		}

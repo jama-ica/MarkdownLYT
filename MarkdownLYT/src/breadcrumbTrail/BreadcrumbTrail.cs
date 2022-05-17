@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace MarkdownLYT
 	{
 		const string TopLinkName = "[Home]";
 
-		public static void AddBreadcrumbTrail(DirectoryInfo homeDir, FileInfo file)
+		public static void AddBreadcrumbTrail(FileInfo file, TagLayerInfo tagLayer)
 		{
 			var breadcrumbTrail = CreateBreadcrumbTrail(homeDir, file);
 
@@ -55,8 +55,13 @@ namespace MarkdownLYT
 		}
 
 
-		static String CreateBreadcrumbTrail(DirectoryInfo homeDir, FileInfo file)
+		static String CreateBreadcrumbTrail(TagLayerInfo tagLayerInfo)
 		{
+			string breadcrumbTrail = "";
+			while(true)
+			{
+				breadcrumbTrail = $"[{";
+			}
 			var filePath = file.Directory.FullName;
 			var fileRelativePath = filePath.Replace(homeDir.FullName, "");
 			var layres = fileRelativePath.Split('\\');
