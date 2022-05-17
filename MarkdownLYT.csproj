@@ -48,20 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\breadcrumbTrail\BreadcrumbTrail.cs" />
-    <Compile Include="src\debug\Debug.cs" />
+    <Compile Include="src\log\Log.cs" />
     <Compile Include="src\Define.cs" />
     <Compile Include="src\FileReplacer.cs" />
     <Compile Include="src\home\HomeFile.cs" />
     <Compile Include="src\moc\MocFile.cs" />
-    <Compile Include="src\tag\AllTagInfo.cs" />
     <Compile Include="src\tag\AllTagsFile.cs" />
-    <Compile Include="src\tag\TagInfo.cs" />
+    <Compile Include="src\tag\TagLayerInfo.cs" />
     <Compile Include="src\tag\TagObject.cs" />
     <Compile Include="src\workspace\LYTFile.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\setting\SettingInfo.cs" />
-    <Compile Include="src\tag\Tag.cs" />
+    <Compile Include="src\tag\TagInfo.cs" />
     <Compile Include="src\tag\TagReader.cs" />
     <Compile Include="src\workspace\WorkSpace.cs" />
     <Compile Include="src\workspace\WorkSpaceSetting.cs" />

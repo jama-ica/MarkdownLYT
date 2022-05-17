@@ -10,7 +10,7 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Debug.Info( "version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
+			Log.Info( "version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
 
 			var setting = new SettingInfo();
 

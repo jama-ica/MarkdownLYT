@@ -17,35 +17,34 @@ namespace MarkdownLYT.Home
 			this.path = path;
 		}
 
-		public void UpdateFile(List<TagInfo> tagInfos)
+		public void UpdateFile(TagLayerInfo rootTagLayer)
 		{
 			if (!File.Exists(path))
 			{
 				throw new FileNotFoundException(path);
 			}
 
+
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
 			{
 				sw.WriteLine("# Home");
 				sw.WriteLine();
 
-				foreach (var tagInfo in tagInfos)
+				foreach (var tagLayer in rootTagLayer.chilidren)
 				{
-					var layers = tagInfo.tag.GetLayers();
 
-					sw.WriteLine("# " + tagInfo.tag.text);
+					sw.WriteLine("# " + tagLayer.name);
 					sw.WriteLine();
 
-					if ( Define.LEYER_TOP_LEVEL < layers.Count 
-						|| 3 <= tagInfo.lytFiles.Count)
+					if ( 3 <= tagLayer.chilidren.Count)
 					{
 						//TODO add moc link
 					}
 					else
 					{
-						foreach (var lytFile in tagInfo.lytFiles)
+						//TODO add files link
+						foreach (var lytFile in tagLayer.chilidren.)
 						{ 
-							//TODO add link to this file
 						}
 					}
 

@@ -11,12 +11,12 @@ namespace MarkdownLYT
 	internal class LYTFile
 	{
 		FileInfo file;
-		public List<Tag.Tag> tags { get; }
+		public List<Tag.TagInfo> tags { get; }
 
 		public LYTFile()
 		{
 			this.file = null;
-			this.tags = new List<Tag.Tag>();
+			this.tags = new List<Tag.TagInfo>();
 		}
 
 		public void Load(string path)

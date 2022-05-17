@@ -51,9 +51,9 @@ namespace MarkdownLYT
 
 		}
 
-		public List<Tag.Tag> GetAllTags()
+		public List<Tag.TagInfo> GetAllTags()
 		{
-			var allTags = new List<Tag.Tag>();
+			var allTags = new List<Tag.TagInfo>();
 
 			foreach(var lytFile in this.lytFiles )
 			{
@@ -80,6 +80,18 @@ namespace MarkdownLYT
 
 		public void UpsateTagFile()
 		{
+		}
+
+		public TagLayerInfo GetRootlTagLayerInfo()
+		{
+			var rootTagLaterInfo = new TagLayerInfo();
+
+			foreach (var lytFile in this.lytFiles)
+			{
+
+			}
+
+			return rootTagLaterInfo;
 		}
 	}
 }

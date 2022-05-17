@@ -14,14 +14,14 @@ namespace MarkdownLYT.Tag
 
 		}
 
-		public static List<Tag> Read(FileInfo file)
+		public static List<TagInfo> Read(FileInfo file)
 		{
 			if (!file.Exists)
 			{
 				throw new FileNotFoundException(file.FullName);
 			}
 
-			var tags = new List<Tag>();
+			var tags = new List<TagInfo>();
 			
 			using (StreamReader sreader = new StreamReader(file.FullName, Encoding.UTF8))
 			{
@@ -49,9 +49,9 @@ namespace MarkdownLYT.Tag
 			return tags;
 		}
 
-		static List<Tag> ConvertTagFrom(string text)
+		static List<TagInfo> ConvertTagFrom(string text)
 		{
-			var tags = new List<Tag>();
+			var tags = new List<TagInfo>();
 
 			var deserializer = new YamlDotNet.Serialization.Deserializer();
 
@@ -62,7 +62,7 @@ namespace MarkdownLYT.Tag
 				{
 					foreach (var tagText in tagObj.tag)
 					{
-						var tag = new Tag(tagText);
+						var tag = new TagInfo(tagText);
 						if (tags.Contains(tag))
 						{
 							continue;
@@ -81,7 +81,7 @@ namespace MarkdownLYT.Tag
 				{
 					foreach (var tagText in tagsObj.tags)
 					{
-						var tag = new Tag(tagText);
+						var tag = new TagInfo(tagText);
 						if (tags.Contains(tag))
 						{
 							continue;

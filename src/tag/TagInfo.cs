@@ -6,19 +6,72 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT.Tag
 {
-	internal class TagInfo
+	internal class TagInfo : IEqualityComparer<TagInfo>
 	{
-		public Tag tag { get; }
-		public List<LYTFile> lytFiles { get; }
+		public string fullPath { get; }
+		public List<string> layers { get; }
 
-		public TagInfo(Tag tag)
+		public TagInfo(string text)
 		{
-			this.lytFiles = new List<LYTFile>();
+			this.fullPath = text;
+			this.layers = this.fullPath.Split('/').ToList();
 		}
 
-		public void AddLYTFile(LYTFile lytFile)
+		public string GetName()
 		{
-			this.lytFiles.Add(lytFile);
+			return layers.Last();
 		}
+
+		public string GetName(int layerLevel)
+		{
+			if(Define.LEYER_TOP_LEVEL > layerLevel)
+			{
+				Log.Error($"invalid layer level (= {layerLevel}) is passed");
+				return "";
+			}
+			if (layerLevel >= layers.Count)
+			{
+				Log.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
+				return "";
+			}
+
+			return layers[layerLevel];
+		}
+
+		public string GetPath(int layerLevel)
+		{
+			if (Define.LEYER_TOP_LEVEL > layerLevel)
+			{
+				Log.Error($"invalid layer level (= {layerLevel}) is passed");
+				return "";
+			}
+			if (layerLevel >= layers.Count)
+			{
+				Log.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
+				return "";
+			}
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < layerLevel; i++)
+			{
+				sb.Append(layers[i]);
+				if(i + 1 < layerLevel)
+				{
+					sb.Append('/');
+				}
+			}
+			return sb.ToString();
+		}
+
+		public bool Equals(TagInfo x, TagInfo y)
+		{
+			return x.fullPath == y.fullPath;
+		}
+
+		public int GetHashCode(TagInfo obj)
+		{
+			return obj.fullPath.GetHashCode();
+		}
+
 	}
 }
