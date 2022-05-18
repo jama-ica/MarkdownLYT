@@ -9,16 +9,24 @@ namespace MarkdownLYT.Tag
 {
 	internal class RootTagLayerInfo : TagLayerInfo
 	{
+		// Constructor
 		public RootTagLayerInfo()
 			: base("", null)
 		{
 			
 		}
-		
 
 		public override bool IsRoot()
 		{
 			return true;
+		}
+		
+		public void AddLayer(NoteBook note)
+		{
+			foreach (var tag in note.tags)
+			{
+				AddLayer(tag.fullPath, note);
+			}
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace MarkdownLYT.Tag
 
 			try
 			{
-				var tagObj = deserializer.Deserialize<TagObject>(text);
+				var tagObj = deserializer.Deserialize<TagObj>(text);
 				if (tagObj != null)
 				{
 					foreach (var tagText in tagObj.tag)
@@ -76,7 +76,7 @@ namespace MarkdownLYT.Tag
 
 			try
 			{
-				var tagsObj = deserializer.Deserialize<TagsObject>(text);
+				var tagsObj = deserializer.Deserialize<TagsObj>(text);
 				if (tagsObj != null)
 				{
 					foreach (var tagText in tagsObj.tags)

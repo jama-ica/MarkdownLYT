@@ -16,7 +16,6 @@ namespace MarkdownLYT
 		public void Replace(DirectoryInfo dir)
 		{
 			// path 以下の全ファイル
-
 			FileInfo[] files = dir.GetFiles("*.txt", System.IO.SearchOption.AllDirectories);
 
 			foreach (System.IO.FileInfo f in files)

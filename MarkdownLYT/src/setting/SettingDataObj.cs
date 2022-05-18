@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT
 {
-	internal class SettingInfo
+	internal class SettingDataObj
 	{
-		public string WorkPlace { get; set; }
+		public class WorkspaceData
+		{
+			public string path { get; set; }
+
+		}
+
+		public WorkspaceData workspace { get; set; }
+
 	}
 }

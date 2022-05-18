@@ -8,12 +8,12 @@ using MarkdownLYT.Tag;
 
 namespace MarkdownLYT
 {
-	internal class LYTFile
+	internal class NoteBook
 	{
 		FileInfo file;
 		public List<TagInfo> tags { get; }
 
-		public LYTFile()
+		public NoteBook()
 		{
 			this.file = null;
 			this.tags = new List<TagInfo>();
@@ -34,6 +34,21 @@ namespace MarkdownLYT
 
 			this.file = file;
 			LoadTag(this.file);
+		}
+
+		public string GetFileName()
+		{
+			return this.file.Name;
+		}
+
+		public string GetName()
+		{
+			return this.file.Name[..^3];
+		}
+
+		public string GetFullName()
+		{
+			return this.file.FullName;
 		}
 
 		void LoadTag(FileInfo file)

@@ -22,7 +22,7 @@ namespace MarkdownLYT.Tag
 			{
 				foreach (var tag in tags)
 				{
-					sw.WriteLine(tag.text);
+					sw.WriteLine(tag.fullPath);
 				}
 			}
 		}

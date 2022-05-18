@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MarkdownLYT
 {
@@ -10,11 +11,35 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Log.Info( "version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
+			Log.Info("Markdown LYT");
+			Log.Info( "- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
+			Log.Info("");
 
-			var setting = new SettingInfo();
+			// Load setting
+			var setting = SettingData.GetInstance();
+			{
+				var dat = setting.Load();
+				if (dat == null)
+				{
+					dat = setting.CreateDefaultData();
+					setting.Save( dat );
+				}
+			}
 
 			var workSpace = new WorkSpace();
+			{
+				var workspacePath = SettingData.GetData().workspace.path;
+				if (workspacePath == String.Empty)
+				{
+					Log.Info("Workspace path is empty.");
+					InputWorkspacePath();
+				}
+				var workspaceDir = new DirectoryInfo(workspacePath);
+				if (!workspaceDir.Exists)
+				{
+
+				}
+			}
 
 			// Workspace内のファイルをロード
 			workSpace.Load(@"C:\Users\jama-\source\repos\MarkdownLYT\test"); // for Desktop
@@ -44,6 +69,24 @@ namespace MarkdownLYT
 				{
 					return;
 				}
+			}
+		}
+
+		static void InputWorkspacePath()
+		{
+			while (true)
+			{
+				Log.Info("Please input your workspace dir path.");
+				string input = Console.ReadLine();
+				var dir = new DirectoryInfo(input);
+				if (!dir.Exists)
+				{
+					Log.Warn("The directory does not exist.");
+					continue;
+				}
+
+				SettingData.GetData().workspace.path = dir.FullName;
+				SettingData.GetInstance().Save();
 			}
 		}
 	}

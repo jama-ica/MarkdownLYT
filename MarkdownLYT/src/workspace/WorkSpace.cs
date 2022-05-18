@@ -12,21 +12,19 @@ namespace MarkdownLYT
 	internal class WorkSpace
 	{
 
-		WorkSpaceSetting setting;
-
 		string path;
-		List<LYTFile> lytFiles;
+		List<NoteBook> notes;
 
 
 		public WorkSpace()
 		{
-			this.lytFiles = new List<LYTFile>();
+			this.notes = new List<NoteBook>();
 		}
 
 		public void Load(string path)
 		{
 			this.path = path;
-			this.lytFiles.Clear();
+			this.notes.Clear();
 
 			if (!Directory.Exists(path))
 			{
@@ -38,10 +36,10 @@ namespace MarkdownLYT
 			{
 				try
 				{
-					var lytFile = new LYTFile();
-					lytFile.Load(file);
-					this.lytFiles.Add(lytFile);
-					Console.WriteLine(file);
+					var notes = new NoteBook();
+					notes.Load(file);
+					this.notes.Add(notes);
+					Log.Info(file);
 				}
 				catch (FileNotFoundException)
 				{
@@ -51,11 +49,11 @@ namespace MarkdownLYT
 
 		}
 
-		public List<Tag.TagInfo> GetAllTags()
+		public List<TagInfo> GetAllTags()
 		{
 			var allTags = new List<Tag.TagInfo>();
 
-			foreach(var lytFile in this.lytFiles )
+			foreach(var lytFile in this.notes )
 			{
 				var tags = lytFile.tags;
 				foreach (var tag in tags)
@@ -68,7 +66,7 @@ namespace MarkdownLYT
 				}
 			}
 
-			allTags.OrderBy(tag => tag.text);
+			allTags.OrderBy(tag => tag.fullPath);
 			return allTags;
 		}
 
@@ -78,20 +76,20 @@ namespace MarkdownLYT
 			homeFile.UpdateFile(GetAllTags());
 		}
 
-		public void UpsateTagFile()
+		public void UpdateTagFile()
 		{
 		}
 
-		public TagLayerInfo GetRootlTagLayerInfo()
+		public TagLayerInfo CreateRootlTagLayer()
 		{
-			var rootTagLaterInfo = new TagLayerInfo();
+			var rootTagLater = new RootTagLayerInfo();
 
-			foreach (var lytFile in this.lytFiles)
+			foreach (var note in this.notes)
 			{
-
+				rootTagLater.AddLayer(note);
 			}
 
-			return rootTagLaterInfo;
+			return rootTagLater;
 		}
 	}
 }

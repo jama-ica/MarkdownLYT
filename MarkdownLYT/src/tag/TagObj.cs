@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT.Tag
 {
-	internal class TagObject
+	internal class TagObj
 	{
 		public string[] tag { get; set; }
 	}
 
-	internal class TagsObject
+	internal class TagsObj
 	{
 		public string[] tags { get; set; }
 	}

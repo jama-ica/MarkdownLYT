@@ -31,7 +31,6 @@ namespace MarkdownLYT.Home
 
 				foreach (var tagLayer in rootTagLayer.chilidren)
 				{
-
 					sw.WriteLine("# " + tagLayer.name);
 					sw.WriteLine();
 
@@ -40,15 +39,15 @@ namespace MarkdownLYT.Home
 						// add moc link
 						foreach (var child in tagLayer.chilidren)
 						{
-							$"[{child.name}](./{child.name}/{child.name}.md)";
+							sw.WriteLine($"[{child.name}](./{child.name}/{child.name}.md)");
 						}
 					}
 					else
 					{
 						// add files link
-						foreach (var lytFile in tagLayer.lytFiles)
+						foreach (var note in tagLayer.notes)
 						{
-							$"[{lytFile.name}]({lytFile.fullPath})";
+							sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
 						}
 					}
 				}

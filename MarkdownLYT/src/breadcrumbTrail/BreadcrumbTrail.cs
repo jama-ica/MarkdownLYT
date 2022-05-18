@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using MarkdownLYT.Tag;
 
 namespace MarkdownLYT
 {
@@ -13,118 +14,114 @@ namespace MarkdownLYT
 
 		public static void AddBreadcrumbTrail(FileInfo file, TagLayerInfo tagLayer)
 		{
-			var breadcrumbTrail = CreateBreadcrumbTrail(homeDir, file);
+			var breadcrumbTrail = CreateBreadcrumbTrail(tagLayer);
 
-			bool IsAlreadyHeadBreadcrumbTrail = false;
 			String allText = "";
-
-			using (StreamReader sr = new StreamReader(file.FullName))
+			E_BREADCRUMB_TRAIL_STATE state;
+			using (var sr = new StreamReader(file.FullName))
 			{
 				var firstLine = sr.ReadLine();
-				{
-					// 先頭は既にパンくずリストか？
-					if (firstLine != null)
-					{
-						IsAlreadyHeadBreadcrumbTrail = firstLine.StartsWith(TopLinkName);
-					}
-
-					if (IsAlreadyHeadBreadcrumbTrail)
-					{
-						allText = breadcrumbTrail + "\r\n";
-					}
-					else
-					{
-						allText = breadcrumbTrail + "\r\n" + "\r\n" + firstLine + "\r\n";
-					}
-
-					if (firstLine != null)
-					{
-						var line = "";
-						while ((line = sr.ReadLine()) != null)
-						{
-							allText += line + "\r\n";
-						}
-					}
-				}
+				state = CheckBreadcrumbTrail(breadcrumbTrail, firstLine);
 			}
 
-			using (var sw = new StreamWriter(file.FullName, false, Encoding.UTF8))
+			switch(state)
 			{
-				sw.Write(allText);
+				case E_BREADCRUMB_TRAIL_STATE.NONE:
+					AppendBreadcrumbTrail(breadcrumbTrail, file);
+					break;
+				case E_BREADCRUMB_TRAIL_STATE.INCORRECT:
+					ReplaceBreadcrumbTrail(breadcrumbTrail, file);
+					break;
+				case E_BREADCRUMB_TRAIL_STATE.CORRECT:
+					// nothing to do
+					break;
+				default:
+					Log.Error($"unexpect state ({state})");
+					break;
 			}
 		}
 
-
-		static String CreateBreadcrumbTrail(TagLayerInfo tagLayerInfo)
+		static void AppendBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
 		{
-			string breadcrumbTrail = "";
-			while(true)
+			using (var sw = new StreamWriter(file.FullName, append:true, Encoding.UTF8))
 			{
-				breadcrumbTrail = $"[{";
+				sw.WriteLine(breadcrumbTrail);
+				sw.WriteLine("");
 			}
-			var filePath = file.Directory.FullName;
-			var fileRelativePath = filePath.Replace(homeDir.FullName, "");
-			var layres = fileRelativePath.Split('\\');
+		}
 
-			String breadcrumbTrail = "";
-			for (int i = 0; i < layres.Length; i++)
+		static void ReplaceBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
+		{
+			string[] lines = System.IO.File.ReadAllLines(file.FullName, Encoding.UTF8);
+
+			lines[0] = breadcrumbTrail;
+
+			using (var sw = new StreamWriter(file.FullName, append: false, Encoding.UTF8))
 			{
-				// リンクタイトル
+				foreach (var line in lines)
 				{
-					if (i == 0)
-					{
-						breadcrumbTrail += TopLinkName;
-					}
-					else
-					{
-						breadcrumbTrail += "[" + layres[i] + "]";
-					}
+					sw.WriteLine(line);
 				}
+			}
+		}
 
-				// リンクパス階層
-				{
-					breadcrumbTrail += "(";
-					int distance = layres.Length - i - 1;
-					if (0 == distance)
-					{
-						breadcrumbTrail += "./";
-					}
-					else if (0 < distance)
-					{
-						for (int j = 0; j < distance; j++)
-						{
-							breadcrumbTrail += "../";
-						}
-					}
-				}
+		enum E_BREADCRUMB_TRAIL_STATE
+		{
+			NONE,
+			INCORRECT,
+			CORRECT,
+		};
 
-				// リンク
-				{
-					if (i == 0)
-					{
-						breadcrumbTrail += "home.md)";
-					}
-					else
-					{
-						breadcrumbTrail += layres[i] + ".md)";
-					}
-				}
-
-				// 区切り
-				breadcrumbTrail += " / ";
+		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string text)
+		{
+			if (!text.StartsWith("[Home]("))
+			{
+				return E_BREADCRUMB_TRAIL_STATE.NONE;
 			}
 
-			// 自身のファイル
+			if (breadcrumbTrail == text)
 			{
-				int nameSize = file.Name.Length;
-				String name = file.Name; //TODO file.Name[..(nameSize - 3)];
-				if (name != layres[layres.Length - 1])
+				return E_BREADCRUMB_TRAIL_STATE.CORRECT;
+			}
+
+			return E_BREADCRUMB_TRAIL_STATE.INCORRECT;
+		}
+
+		static string CreateBreadcrumbTrail(TagLayerInfo tagLayerInfo)
+		{
+			var sb = new StringBuilder();
+
+			TagLayerInfo parent = null;
+			var relativePathSign = new StringBuilder();
+			int layer = 0;
+			while (true)
+			{
+				parent = tagLayerInfo.parent;
+				if (parent == null)
 				{
-					breadcrumbTrail += file.Name;
+					break;
 				}
 
-				return breadcrumbTrail;
+				// update relative path sign
+				if (layer == 0)
+				{
+					relativePathSign.Append("./");
+				}
+				else if (layer == 1)
+				{
+					relativePathSign.Insert(0, "."); // "./" -> "../"
+				}
+				else
+				{
+					relativePathSign.Append("../");
+				}
+
+				sb.Insert(0, $"[{parent.name}]({relativePathSign.ToString()}{parent.name}) / ");
+				layer++;
 			}
+
+			sb.Insert(0, $"[Home]({relativePathSign.ToString()}Home.md) / ");
+			return sb.ToString();
 		}
 	}
 }

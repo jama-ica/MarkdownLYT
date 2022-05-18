@@ -13,28 +13,23 @@ namespace MarkdownLYT.Tag
 		public TagLayerInfo parent { get; }
 		public List<TagLayerInfo> chilidren { get; }
 
-		public List<LYTFile> lytFiles { get; }
+		public List<NoteBook> notes { get; }
 
-
+		// Constructor
 		public TagLayerInfo(string name, TagLayerInfo parent)
 		{
 			this.name = name;
 			this.parent = parent;
 			this.chilidren = new List<TagLayerInfo>();
-			this.lytFiles = new List<LYTFile>();
+			this.notes = new List<NoteBook>();
 		}
 
-		public void AddChild(TagLayerInfo tagLayerInfo)
+		public virtual bool IsRoot()
 		{
-			this.chilidren.Add(tagLayerInfo);
+			return false;
 		}
 
-		public void AddLytFile(LYTFile lytFile)
-		{
-			this.lytFiles.Add(lytFile);
-		}
-
-		public void AddLytFile(string path, LYTFile lytFile)
+		public void AddLayer(string path, NoteBook note)
 		{
 			string[] layers = TagPath.GetLayers(path);
 
@@ -46,7 +41,7 @@ namespace MarkdownLYT.Tag
 					child = new TagLayerInfo(layers[0], this);
 					AddChild(child);
 				}
-				child.AddLytFile(lytFile);
+				child.AddNote(note);
 				return;
 			}
 
@@ -60,16 +55,22 @@ namespace MarkdownLYT.Tag
 					child = new TagLayerInfo(name, this);
 					AddChild(child);
 				}
-				child.AddLytFile(TagPath.RemoveTopLayer(path), lytFile);
+				child.AddLytFile(TagPath.RemoveTopLayer(path), note);
 			}
 		}
 
-		public virtual bool IsRoot()
+
+		void AddChild(TagLayerInfo tagLayerInfo)
 		{
-			return false;
+			this.chilidren.Add(tagLayerInfo);
 		}
 
-		public TagLayerInfo? GetChild(string name)
+		void AddNote(NoteBook note)
+		{
+			this.notes.Add(note);
+		}
+
+		TagLayerInfo? GetChild(string name)
 		{
 			foreach (var child in this.chilidren)
 			{
