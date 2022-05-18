@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace MarkdownLYT.Tag
 
 			var tags = new List<TagInfo>();
 			
-			using (StreamReader sreader = new StreamReader(file.FullName, Encoding.UTF8))
+			using (var sreader = new StreamReader(file.FullName, Encoding.UTF8))
 			{
 				if (file == null)
 				{

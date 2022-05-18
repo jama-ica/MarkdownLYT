@@ -17,7 +17,7 @@ namespace MarkdownLYT.Home
 			this.path = path;
 		}
 
-		public void UpdateFile(TagLayerInfo rootTagLayer)
+		public void UpdateFile(RootTagLayerInfo rootTagLayer)
 		{
 			if (!File.Exists(this.path))
 			{
@@ -26,29 +26,34 @@ namespace MarkdownLYT.Home
 
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
 			{
+				// add breadcrumb trail
+				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(rootTagLayer);
+				sw.WriteLine(breadcrumb);
+				sw.WriteLine();
+				
+				// add title
 				sw.WriteLine("# Home");
 				sw.WriteLine();
-
+				
 				foreach (var tagLayer in rootTagLayer.chilidren)
 				{
-					sw.WriteLine("# " + tagLayer.name);
+					sw.WriteLine("## " + tagLayer.name);
 					sw.WriteLine();
 
-					if ( 0 < tagLayer.chilidren.Count)
+					// add moc link
+					sw.WriteLine("moc");
+					foreach (var child in tagLayer.chilidren)
 					{
-						// add moc link
-						foreach (var child in tagLayer.chilidren)
-						{
-							sw.WriteLine($"[{child.name}](./{child.name}/{child.name}.md)");
-						}
+						sw.WriteLine($"[{child.name}](./{child.name}/{child.name}.md)");
 					}
-					else
+			
+					sw.WriteLine("");
+					
+					// add files link
+					sw.WriteLine("notes");
+					foreach (var note in tagLayer.notes)
 					{
-						// add files link
-						foreach (var note in tagLayer.notes)
-						{
-							sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
-						}
+						sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
 					}
 				}
 			}

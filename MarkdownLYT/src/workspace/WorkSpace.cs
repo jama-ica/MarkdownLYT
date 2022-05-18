@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,32 +22,35 @@ namespace MarkdownLYT
 			this.notes = new List<NoteBook>();
 		}
 
-		public void Load(string path)
+		public bool Load(string path)
 		{
 			this.path = path;
 			this.notes.Clear();
 
 			if (!Directory.Exists(path))
 			{
-				throw new DirectoryNotFoundException(path);
+				Log.Error($"path {path} is not found");
+				return false;
 			}
-
-			var files = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories);
-			foreach (string file in files)
+			
+			Log.Info($"Workspace load: {path}");
+			
+			var filePaths = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories);
+			foreach (string filePath in filePaths)
 			{
 				try
 				{
 					var notes = new NoteBook();
-					notes.Load(file);
+					notes.Load(filePath);
 					this.notes.Add(notes);
-					Log.Info(file);
+					Log.Info($"Load: {filePath}");
 				}
 				catch (FileNotFoundException)
 				{
 					continue;
 				}
 			}
-
+			return true;
 		}
 
 		public List<TagInfo> GetAllTags()

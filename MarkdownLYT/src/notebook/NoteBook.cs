@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,21 +19,24 @@ namespace MarkdownLYT
 			this.tags = new List<TagInfo>();
 		}
 
-		public void Load(string path)
+		public bool Load(string path)
 		{
 			var file = new FileInfo(path);
-			Load(file);
+			return Load(file);
 		}
 
-		public void Load(FileInfo file)
+		public bool Load(FileInfo file)
 		{
 			if (!File.Exists(file.FullName))
 			{
-				throw new FileNotFoundException(file.FullName);
+				Log.Error($"Notebook: file not found: {file.FillName});
+				return false;
 			}
 
+			Log.Info($"Notebook: load file: {file.FullName}");
 			this.file = file;
 			LoadTag(this.file);
+			teturn true;
 		}
 
 		public string GetFileName()
@@ -53,10 +56,12 @@ namespace MarkdownLYT
 
 		void LoadTag(FileInfo file)
 		{
+			this.tags.Clear();
 			var tags = TagReader.Read(file);
 			foreach (var tag in tags)
 			{
 				this.tags.Add(tag);
+				Log.Debug($"Notebook add tag: {tag}");
 			}
 		}
 
