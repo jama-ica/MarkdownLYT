@@ -7,51 +7,59 @@ using System.IO;
 
 namespace MarkdownLYT
 {
-	internal class SettingData
+	internal class SettingFile
 	{
 		public static readonly string fileName = "setting.dat";
 
-		static SettingData Instance = null;
+		static SettingFile? Instance = null;
 
-		SettingDataObj dataObj;
+		SettingDataObj? dataObj;
 
-		private SettingData()
+		private SettingFile()
 		{
 			this.dataObj = null;
 		}
 
-		public static SettingData GetInstance()
+		public static SettingFile GetInstance()
 		{
+			if (Instance == null)
+			{
+				Instance = new SettingFile();
+			}
 			return Instance;
 		}
 
-		public static SettingDataObj GetData()
+		public static SettingDataObj? GetData()
 		{
-			if(Instance == null)
-			{
-				Instance = new SettingData();
-			}
-			return Instance.dataObj;
+			return GetInstance().dataObj;
 		}
 
-		public SettingDataObj Load()
+		public bool Load()
 		{
 			if (!File.Exists(fileName))
 			{
-				return null;
+				return false;
 			}
 
+			var text = File.ReadAllText(fileName);
 			var deserializer = new YamlDotNet.Serialization.Deserializer();
-			return deserializer.Deserialize<SettingDataObj>(fileName);
+			this.dataObj = deserializer.Deserialize<SettingDataObj>(text);
+			return true;
 		}
 
 		public void Save()
 		{
+			if (this.dataObj == null)
+			{
+				Log.Error("dataObj is null");
+				return;
+			}
 			Save(this.dataObj);
 		}
 
 		public void Save(SettingDataObj data)
 		{
+			this.dataObj = data;
 			using TextWriter writer = File.CreateText(fileName);
 			var serializer = new YamlDotNet.Serialization.Serializer();
 			serializer.Serialize(writer, data);

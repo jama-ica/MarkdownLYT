@@ -55,7 +55,7 @@ namespace MarkdownLYT.Tag
 					child = new TagLayerInfo(name, this);
 					AddChild(child);
 				}
-				child.AddLytFile(TagPath.RemoveTopLayer(path), note);
+				child.AddLayer(TagPath.RemoveTopLayer(path), note);
 			}
 		}
 

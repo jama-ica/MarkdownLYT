@@ -15,61 +15,35 @@ namespace MarkdownLYT
 			Log.Info( "- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
 			Log.Info("");
 
-			// Load setting
-			var setting = SettingData.GetInstance();
+			// Load Setting
+			var setting = SettingFile.GetInstance();
 			{
-				var dat = setting.Load();
-				if (dat == null)
+				if(false == setting.Load())
 				{
-					dat = setting.CreateDefaultData();
+					var dat = setting.CreateDefaultData();
 					setting.Save( dat );
 				}
 			}
 
-			var workSpace = new WorkSpace();
+			// Load workspace
 			{
-				var workspacePath = SettingData.GetData().workspace.path;
+				var workspacePath = SettingFile.GetData().workspace.path;
 				if (workspacePath == String.Empty)
 				{
-					Log.Info("Workspace path is empty.");
+					Log.Info("Workspace path is not set yet.");
 					InputWorkspacePath();
 				}
+
 				var workspaceDir = new DirectoryInfo(workspacePath);
 				if (!workspaceDir.Exists)
 				{
-
+					Log.Warn($"Workspace path {workspaceDir.FullName} is not found.");
+					InputWorkspacePath();
 				}
 			}
 
-			// Workspace内のファイルをロード
-			workSpace.Load(@"C:\Users\jama-\source\repos\MarkdownLYT\test"); // for Desktop
-			//workSpace.Load(@"C:\Users\jama\Project\MarkdownLYT\test"); // for Dell XPS13
-
-		 // 全文章のタグを読み込んで、タグファイルを更新
-		 var allTags = workSpace.GetAllTags();
-
-			// Home ファイル作成
-			workSpace.UpdateHomeFile();
-
-
-			// フォルダ、ファイルの整理
-
-			// 全文章にパンくずを追加、更新
-
-			// MOCファイル作成
-
-
-			// MOC ファイルにリンクを記載
-
-
-			while (true)
-			{
-				string command = Console.ReadLine();
-				if (command == "exit")
-				{
-					return;
-				}
-			}
+			var workspace = new WorkSpace();
+			InputCommand(workspace);
 		}
 
 		static void InputWorkspacePath()
@@ -77,7 +51,11 @@ namespace MarkdownLYT
 			while (true)
 			{
 				Log.Info("Please input your workspace dir path.");
-				string input = Console.ReadLine();
+				string? input = Console.ReadLine();
+				if (input == null)
+				{
+					continue;
+				}
 				var dir = new DirectoryInfo(input);
 				if (!dir.Exists)
 				{
@@ -85,9 +63,60 @@ namespace MarkdownLYT
 					continue;
 				}
 
-				SettingData.GetData().workspace.path = dir.FullName;
-				SettingData.GetInstance().Save();
+				SettingFile.GetData().workspace.path = dir.FullName;
+				SettingFile.GetInstance().Save();
+				break;
 			}
+		}
+
+		static void InputCommand(WorkSpace workspace)
+		{
+			// コマンド待ち
+			while (true)
+			{
+				Log.Info("Please input command");
+				foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
+				{
+					E_COMMAND cmd = (E_COMMAND)no;
+					if (cmd == E_COMMAND.MAX) { continue; }
+					Log.Info($"   {cmd.GetName()}   {cmd.GetDescription()}");
+				}
+
+				string? text = Console.ReadLine();
+				if (text == null)
+				{
+					continue;
+				}
+
+				var command = ExCommand.ToCommand(text);
+
+				if (command == E_COMMAND.UPDATE)
+				{
+					RunCommandUpdate(workspace);
+				}
+				else if (command == E_COMMAND.EXIT)
+				{
+					break;
+				}
+			}
+		}
+
+		static void RunCommandUpdate(WorkSpace workspace)
+		{
+			// Load workspace
+			var workspacePath = SettingFile.GetData().workspace.path;
+			Log.Info($"Load workspace: {workspacePath}");
+			workspace.Load(workspacePath);
+
+			// Update tag file
+			var allTags = workspace.GetAllTags();
+
+			// Update home and MOC
+			workspace.UpdateHomeFile();
+
+			// Update breadcrumb trail
+
+			// replace file and directory
 		}
 	}
 }

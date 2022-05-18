@@ -18,6 +18,7 @@ namespace MarkdownLYT
 
 		public WorkSpace()
 		{
+			this.path = String.Empty;
 			this.notes = new List<NoteBook>();
 		}
 
@@ -73,7 +74,7 @@ namespace MarkdownLYT
 		public void UpdateHomeFile()
 		{
 			var homeFile = new HomeFile(path + @"\home.md");
-			homeFile.UpdateFile(GetAllTags());
+			homeFile.UpdateFile(CreateRootlTagLayer());
 		}
 
 		public void UpdateTagFile()
