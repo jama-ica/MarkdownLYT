@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace MarkdownLYT
 		static void Main(string[] args)
 		{
 			Log.Info("Markdown LYT");
-			Log.Info( "- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
+			Log.Info("- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
 			Log.Info("");
 
 			// Load Setting
@@ -164,9 +164,17 @@ namespace MarkdownLYT
 		{
 			var today = DateTime.Today;
 			var year = today.Year;
+			var month = today.
+			var dt = System.DateTime.ParseExact("201709", "yyyyMM", null);
 			//TODO
+			FileUtil.SafeCreateFile();
+			
+			
+			var proc = new System.Diagnostics.Process();
 
-
+            proc.StartInfo.FileName = @"c:\MySpace\memo.txt";
+            proc.StartInfo.UseShellExecute = true;
+            proc.Start();
 		}
 		static void RunCommandMonth()
 		{
