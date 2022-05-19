@@ -16,7 +16,6 @@ namespace MarkdownLYT
 		{
 			var breadcrumbTrail = CreateBreadcrumbTrail(tagLayer);
 
-			String allText = "";
 			E_BREADCRUMB_TRAIL_STATE state;
 			using (var sr = new StreamReader(file.FullName))
 			{
@@ -74,11 +73,14 @@ namespace MarkdownLYT
 
 		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string text)
 		{
+			if (text == null)
+			{
+				return E_BREADCRUMB_TRAIL_STATE.NONE;
+			}
 			if (!text.StartsWith("[Home]("))
 			{
 				return E_BREADCRUMB_TRAIL_STATE.NONE;
 			}
-
 			if (breadcrumbTrail == text)
 			{
 				return E_BREADCRUMB_TRAIL_STATE.CORRECT;
@@ -87,40 +89,30 @@ namespace MarkdownLYT
 			return E_BREADCRUMB_TRAIL_STATE.INCORRECT;
 		}
 
-		static string CreateBreadcrumbTrail(TagLayerInfo tagLayerInfo)
+		public static string CreateBreadcrumbTrail(TagLayerInfo tagLayer)
 		{
 			var sb = new StringBuilder();
 
-			TagLayerInfo parent = null;
-			var relativePathSign = new StringBuilder();
-			int layer = 0;
-			while (true)
+			var target = tagLayer;
+			while(true)
 			{
-				parent = tagLayerInfo.parent;
+				var parent = target.parent;
 				if (parent == null)
 				{
 					break;
 				}
 
-				// update relative path sign
-				if (layer == 0)
+				if(sb.Length != 0)
 				{
-					relativePathSign.Append("./");
-				}
-				else if (layer == 1)
-				{
-					relativePathSign.Insert(0, "."); // "./" -> "../"
-				}
-				else
-				{
-					relativePathSign.Append("../");
+					sb.Insert(0, " / ");
 				}
 
-				sb.Insert(0, $"[{parent.name}]({relativePathSign.ToString()}{parent.name}) / ");
-				layer++;
+				var relativePath = parent.mocFile.GetRelativePath(target.directory);
+				sb.Insert(0, $"[{parent.name}]({parent.name}.md)");
+
+				target = parent;
 			}
 
-			sb.Insert(0, $"[Home]({relativePathSign.ToString()}Home.md) / ");
 			return sb.ToString();
 		}
 	}

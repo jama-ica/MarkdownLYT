@@ -25,5 +25,11 @@ namespace MarkdownLYT
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine(message);
 		}
+
+		public static void Debug(String message)
+		{
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine(message);
+		}
 	}
 }

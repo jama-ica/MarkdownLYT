@@ -10,8 +10,6 @@ namespace MarkdownLYT
 	{
 		UPDATE,
 		EXIT,
-		//--
-		MAX,
 	};
 
 	public static class ExCommand
@@ -27,6 +25,20 @@ namespace MarkdownLYT
 			}
 		}
 
+		static string[] updateAliasNames = {"up"};
+		static string[] exitAliasNames = { "quit", "q" };
+
+		public static string[] GetAliasNames(this E_COMMAND command)
+		{
+			switch (command)
+			{
+				case E_COMMAND.UPDATE: return updateAliasNames;
+				case E_COMMAND.EXIT: return exitAliasNames;
+				default:
+					throw new Exception("unknow command");
+			}
+		}
+
 		public static string GetDescription(this E_COMMAND command)
 		{
 			switch (command)
@@ -38,7 +50,7 @@ namespace MarkdownLYT
 			}
 		}
 
-		public static E_COMMAND ToCommand(string name)
+		public static E_COMMAND? ToCommand(string name)
 		{
 			foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
 			{
@@ -47,9 +59,15 @@ namespace MarkdownLYT
 				{
 					return command;
 				}
+				foreach (var aliasName in command.GetAliasNames())
+				{
+					if (aliasName == name)
+					{
+						return command;
+					}
+				}
 			}
-			return E_COMMAND.MAX;
+			return null;
 		}
-
 	}
 }

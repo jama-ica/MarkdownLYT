@@ -10,10 +10,9 @@ namespace MarkdownLYT.Tag
 	internal class RootTagLayerInfo : TagLayerInfo
 	{
 		// Constructor
-		public RootTagLayerInfo()
-			: base("", null)
+		public RootTagLayerInfo(string path)
+			: base(path, "Home", null)
 		{
-			
 		}
 
 		public override bool IsRoot()

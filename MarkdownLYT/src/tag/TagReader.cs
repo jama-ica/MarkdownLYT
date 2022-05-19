@@ -22,34 +22,119 @@ namespace MarkdownLYT.Tag
 			}
 
 			var tags = new List<TagInfo>();
-			
-			using (var sreader = new StreamReader(file.FullName, Encoding.UTF8))
+
+			using (var sr = new StreamReader(file.FullName, Encoding.UTF8))
 			{
-				if (file == null)
+				var deserializer = new YamlDotNet.Serialization.Deserializer();
+				for (int i = 0; sr.Peek() != -1 || i < 10; i++)
 				{
-					// ファイルオープン失敗
-					return null;
-				}
-
-				int lineNo = 0;
-				while (sreader.Peek() != -1)
-				{
-					string lineText = sreader.ReadLine();
-
-					tags.AddRange( ConvertTagFrom(lineText) );
-					lineNo++;
-
-					if(10 <= lineNo)
+					var line = sr.ReadLine();
+					var tgs = DeserializeTag(deserializer, line);
+					if (tgs == null)
 					{
-						break;
+						continue;
 					}
+					tags.AddRange(tgs);
 				}
 			}
 
 			return tags;
 		}
 
-		static List<TagInfo> ConvertTagFrom(string text)
+		static List<TagInfo> DeserializeTag(YamlDotNet.Serialization.Deserializer deserializer, string text)
+		{
+			if (text == null)
+			{
+				return null;
+			}
+			if(!text.StartsWith("Tag: ") && !text.StartsWith("Tags: ") && !text.StartsWith("tag: ") && !text.StartsWith("tags: "))
+			{
+				return null;
+			}
+			
+<<<<<<< Updated upstream
+			using (var sreader = new StreamReader(file.FullName, Encoding.UTF8))
+=======
+			var tags = new List<TagInfo>();
+
+			try
+>>>>>>> Stashed changes
+			{
+				var dict = deserializer.Deserialize<Dictionary<string, string[]>>(text);
+				if (dict != null)
+				{
+					foreach (KeyValuePair<string, string[]> pair in dict)
+					{
+						if (pair.Key == "tag" || pair.Key == "Tag" || pair.Key == "tags" || pair.Key == "Tags")
+						{
+							foreach (var val in pair.Value)
+							{
+								var tag = new TagInfo(val);
+								tags.Add(tag);
+							}
+						}
+					}
+				}
+			}
+			catch
+			{
+			}
+
+			try
+			{
+				var dict = deserializer.Deserialize<Dictionary<string, string>>(text);
+				if (dict != null)
+				{
+					foreach (KeyValuePair<string, string> pair in dict)
+					{
+						if (pair.Key == "tag" || pair.Key == "Tag" || pair.Key == "tags" || pair.Key == "Tags")
+						{
+							var tag = new TagInfo(pair.Value);
+							tags.Add(tag);
+						}
+					}
+				}
+			}
+			catch
+			{
+			}
+
+			return tags;
+		}
+
+
+		static List<TagInfo> ConvertTagFrom3(string text)
+		{
+			var tags = new List<TagInfo>();
+
+			var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
+							.WithNamingConvention(YamlDotNet.Serialization.NamingConventions.CamelCaseNamingConvention.Instance)
+							.Build();
+
+			try
+			{
+				var tagObj = deserializer.Deserialize<TagObj>(text);
+				if (tagObj != null)
+				{
+					foreach (var tagText in tagObj.tag)
+					{
+						var tag = new TagInfo(tagText);
+						if (tags.Contains(tag))
+						{
+							continue;
+						}
+						tags.Add(tag);
+					}
+				}
+			}
+			catch
+			{
+			}
+
+			return tags;
+		}
+
+		static List<TagInfo> ConvertTagFrom2(string text)
 		{
 			var tags = new List<TagInfo>();
 

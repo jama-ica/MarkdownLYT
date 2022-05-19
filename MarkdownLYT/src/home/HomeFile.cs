@@ -53,7 +53,15 @@ namespace MarkdownLYT.Home
 					sw.WriteLine("notes");
 					foreach (var note in tagLayer.notes)
 					{
+<<<<<<< Updated upstream
 						sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
+=======
+						// add files link
+						foreach (var note in tagLayer.notes)
+						{
+							sw.WriteLine($"[{note.GetName()}]({note.GetPath()})");
+						}
+>>>>>>> Stashed changes
 					}
 				}
 			}

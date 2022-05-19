@@ -34,6 +34,7 @@ namespace MarkdownLYT
 					InputWorkspacePath();
 				}
 
+				workspacePath = SettingFile.GetData().workspace.path;
 				var workspaceDir = new DirectoryInfo(workspacePath);
 				if (!workspaceDir.Exists)
 				{
@@ -44,6 +45,7 @@ namespace MarkdownLYT
 
 			var workspace = new WorkSpace();
 			InputCommand(workspace);
+			Environment.Exit(0);
 		}
 
 		static void InputWorkspacePath()
@@ -71,15 +73,13 @@ namespace MarkdownLYT
 
 		static void InputCommand(WorkSpace workspace)
 		{
-			// コマンド待ち
 			while (true)
 			{
 				Log.Info("Please input command");
 				foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
 				{
 					E_COMMAND cmd = (E_COMMAND)no;
-					if (cmd == E_COMMAND.MAX) { continue; }
-					Log.Info($"   {cmd.GetName()}   {cmd.GetDescription()}");
+					Log.Info($"  {String.Format("{0, -10}", cmd.GetName())} {cmd.GetDescription()}");
 				}
 
 				string? text = Console.ReadLine();
@@ -89,6 +89,11 @@ namespace MarkdownLYT
 				}
 
 				var command = ExCommand.ToCommand(text);
+				if (command == null)
+				{
+					Log.Info("Unknown command");
+					continue;
+				}
 
 				if (command == E_COMMAND.UPDATE)
 				{
@@ -98,6 +103,10 @@ namespace MarkdownLYT
 				{
 					break;
 				}
+				else
+				{
+					Log.Info("Unknown command");
+				}
 			}
 		}
 
@@ -105,14 +114,13 @@ namespace MarkdownLYT
 		{
 			// Load workspace
 			var workspacePath = SettingFile.GetData().workspace.path;
-			Log.Info($"Load workspace: {workspacePath}");
 			workspace.Load(workspacePath);
 
 			// Update tag file
 			var allTags = workspace.GetAllTags();
 
 			// Update home and MOC
-			workspace.UpdateHomeFile();
+			workspace.UpdateAllMocFiles();
 
 			// Update breadcrumb trail
 

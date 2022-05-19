@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarkdownLYT.Moc;
 
 namespace MarkdownLYT.Tag
 {
 	internal class TagLayerInfo
 	{
-		public string name { get;  }
+		public string directory { get; }
+		public string name { get; }
 
 		public TagLayerInfo parent { get; }
 		public List<TagLayerInfo> chilidren { get; }
 
 		public List<NoteBook> notes { get; }
 
+		public MocFile mocFile { get; }
+
 		// Constructor
-		public TagLayerInfo(string name, TagLayerInfo parent)
+		public TagLayerInfo(string directory, string name, TagLayerInfo parent)
 		{
+			this.directory = directory;
 			this.name = name;
 			this.parent = parent;
 			this.chilidren = new List<TagLayerInfo>();
 			this.notes = new List<NoteBook>();
+			this.mocFile = new MocFile(@$"{directory}\{name}.md");
 		}
 
 		public virtual bool IsRoot()
@@ -29,16 +35,19 @@ namespace MarkdownLYT.Tag
 			return false;
 		}
 
-		public void AddLayer(string path, NoteBook note)
+		public void AddLayer(string tagText, NoteBook note)
 		{
-			string[] layers = TagPath.GetLayers(path);
+			string[] layers = TagPath.GetLayers(tagText);
+
+			var childPath = $@"{this.directory}\{layers[0]}";
 
 			if (1 == layers.Length)
 			{
-				var child = GetChild(layers[0]);
+				var name = layers[0];
+				var child = GetChild(name);
 				if (child == null)
 				{
-					child = new TagLayerInfo(layers[0], this);
+					child = new TagLayerInfo(childPath, name, this);
 					AddChild(child);
 				}
 				child.AddNote(note);
@@ -48,14 +57,14 @@ namespace MarkdownLYT.Tag
 			if (1 < layers.Length)
 			{
 				//Debug.Assert(index > -1);
-				var name = TagPath.GetTopLayerName(path);
+				var name = TagPath.GetTopLayerName(tagText);
 				var child = GetChild(name);
 				if (child == null)
 				{
-					child = new TagLayerInfo(name, this);
+					child = new TagLayerInfo(childPath, name, this);
 					AddChild(child);
 				}
-				child.AddLayer(TagPath.RemoveTopLayer(path), note);
+				child.AddLayer(TagPath.RemoveTopLayer(tagText), note);
 			}
 		}
 
