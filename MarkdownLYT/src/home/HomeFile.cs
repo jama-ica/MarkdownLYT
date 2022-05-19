@@ -21,7 +21,7 @@ namespace MarkdownLYT.Home
 		{
 			if (!File.Exists(this.path))
 			{
-				throw new FileNotFoundException(this.path);
+				FiltUtil.SafeCreateFile(this.path);
 			}
 
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
@@ -42,6 +42,7 @@ namespace MarkdownLYT.Home
 
 					// add moc link
 					sw.WriteLine("moc");
+					sw.WriteLine();
 					foreach (var child in tagLayer.chilidren)
 					{
 						sw.WriteLine($"[{child.name}](./{child.name}/{child.name}.md)");
@@ -51,17 +52,10 @@ namespace MarkdownLYT.Home
 					
 					// add files link
 					sw.WriteLine("notes");
+					sw.WriteLine();
 					foreach (var note in tagLayer.notes)
 					{
-<<<<<<< Updated upstream
-						sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
-=======
-						// add files link
-						foreach (var note in tagLayer.notes)
-						{
-							sw.WriteLine($"[{note.GetName()}]({note.GetPath()})");
-						}
->>>>>>> Stashed changes
+						sw.WriteLine($"[{note.GetName()}]({note.GetPath()})");
 					}
 				}
 			}

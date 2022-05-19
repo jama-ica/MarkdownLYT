@@ -30,46 +30,28 @@ namespace MarkdownLYT
 
 			if (!Directory.Exists(path))
 			{
-<<<<<<< Updated upstream
-				Log.Error($"path {path} is not found");
-				return false;
-			}
-			
-			Log.Info($"Workspace load: {path}");
-=======
 				Log.Error($"Workspace: load: {path} is not found");
 				return false;
 			}
 			
 			Log.Info($"Workspace: load: {path}");
->>>>>>> Stashed changes
 			
 			var filePaths = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories);
 			foreach (string filePath in filePaths)
 			{
 				try
 				{
-<<<<<<< Updated upstream
-					var notes = new NoteBook();
-					notes.Load(filePath);
-					this.notes.Add(notes);
-					Log.Info($"Load: {filePath}");
-=======
 					var notes = new NoteBook(filePath);
 					notes.Load();
 					this.notes.Add(notes);
->>>>>>> Stashed changes
 				}
 				catch (FileNotFoundException)
 				{
 					continue;
 				}
 			}
-<<<<<<< Updated upstream
-=======
 
 			this.rootTagLayer = CreateRootlTagLayer(this.notes);
->>>>>>> Stashed changes
 			return true;
 		}
 

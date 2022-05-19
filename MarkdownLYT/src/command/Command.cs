@@ -9,6 +9,11 @@ namespace MarkdownLYT
 	public enum E_COMMAND
 	{
 		UPDATE,
+		REPLACE,
+		MOC,
+		TODAY,
+		MONTH,
+		NEXT_MONTH,
 		EXIT,
 	};
 
@@ -20,20 +25,35 @@ namespace MarkdownLYT
 			{
 			case E_COMMAND.UPDATE:	return "update";
 			case E_COMMAND.EXIT:	return "exit"; 
-			default:
+			case E_COMMAND.REPLACE:	return "replace"; 
+			case E_COMMAND.MOC:		return "moc"; 
+			case E_COMMAND.TODAY:	return "today"; 
+			case E_COMMAND.MONTH:	return "month"; 
+			case E_COMMAND.NEXT_MONTH:	return "next month";
+				default:
 				throw new Exception("unknow command");
 			}
 		}
 
 		static string[] updateAliasNames = {"up"};
 		static string[] exitAliasNames = { "quit", "q" };
+		static string[] replaceAliasNames = { "rep", "re" };
+		static string[] mocAliasNames = { "moc" };
+		static string[] todayAliasNames = { "to" };
+		static string[] monthAliasNames = { "mo" };
+		static string[] nextMonthAliasNames = { "nmo", };
 
 		public static string[] GetAliasNames(this E_COMMAND command)
 		{
 			switch (command)
 			{
-				case E_COMMAND.UPDATE: return updateAliasNames;
-				case E_COMMAND.EXIT: return exitAliasNames;
+				case E_COMMAND.UPDATE:	return updateAliasNames;
+				case E_COMMAND.EXIT:	return exitAliasNames;
+				case E_COMMAND.REPLACE: return replaceAliasNames;
+				case E_COMMAND.MOC:		return mocAliasNames;
+				case E_COMMAND.TODAY:	return todayAliasNames;
+				case E_COMMAND.MONTH:	return monthAliasNames;
+				case E_COMMAND.NEXT_MONTH: return nextMonthAliasNames;
 				default:
 					throw new Exception("unknow command");
 			}
@@ -43,8 +63,13 @@ namespace MarkdownLYT
 		{
 			switch (command)
 			{
-				case E_COMMAND.UPDATE:	return "update moc";
-				case E_COMMAND.EXIT:	return "quit this app";
+				case E_COMMAND.UPDATE:	return "... Update moc";
+				case E_COMMAND.EXIT:	return "... Quit this app";
+				case E_COMMAND.REPLACE: return "... Replace all notes";
+				case E_COMMAND.MOC:		return "... Update home & moc";
+				case E_COMMAND.TODAY:	return "... Create or open today note";
+				case E_COMMAND.MONTH:	return "... Create notes for this month";
+				case E_COMMAND.NEXT_MONTH: return "... Create notes for next month";
 				default:
 					throw new Exception("unknow command");
 			}

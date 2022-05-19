@@ -19,26 +19,6 @@ namespace MarkdownLYT
 			this.tags = new List<TagInfo>();
 		}
 
-<<<<<<< Updated upstream
-		public bool Load(string path)
-		{
-			var file = new FileInfo(path);
-			return Load(file);
-		}
-
-		public bool Load(FileInfo file)
-		{
-			if (!File.Exists(file.FullName))
-			{
-				Log.Error($"Notebook: file not found: {file.FillName});
-				return false;
-			}
-
-			Log.Info($"Notebook: load file: {file.FullName}");
-			this.file = file;
-			LoadTag(this.file);
-			teturn true;
-=======
 		public bool Load()
 		{
 			return Load(this.file);
@@ -55,7 +35,6 @@ namespace MarkdownLYT
 			Log.Info($"Notebook: load: {file.FullName}");
 			LoadTag(file);
 			return true;
->>>>>>> Stashed changes
 		}
 
 		public string GetFileName()
@@ -89,11 +68,7 @@ namespace MarkdownLYT
 			foreach (var tag in tags)
 			{
 				this.tags.Add(tag);
-<<<<<<< Updated upstream
-				Log.Debug($"Notebook add tag: {tag}");
-=======
 				Log.Debug($"Notebook: add tag: {tag.fullPath}");
->>>>>>> Stashed changes
 			}
 		}
 

@@ -108,7 +108,7 @@ namespace MarkdownLYT
 				}
 
 				var relativePath = parent.mocFile.GetRelativePath(target.directory);
-				sb.Insert(0, $"[{parent.name}]({parent.name}.md)");
+				sb.Insert(0, $"[{parent.name}]({relativePath})");
 
 				target = parent;
 			}

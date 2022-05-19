@@ -52,13 +52,10 @@ namespace MarkdownLYT.Tag
 				return null;
 			}
 			
-<<<<<<< Updated upstream
-			using (var sreader = new StreamReader(file.FullName, Encoding.UTF8))
-=======
+
 			var tags = new List<TagInfo>();
 
 			try
->>>>>>> Stashed changes
 			{
 				var dict = deserializer.Deserialize<Dictionary<string, string[]>>(text);
 				if (dict != null)

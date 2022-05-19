@@ -81,6 +81,7 @@ namespace MarkdownLYT
 					E_COMMAND cmd = (E_COMMAND)no;
 					Log.Info($"  {String.Format("{0, -10}", cmd.GetName())} {cmd.GetDescription()}");
 				}
+				Log.Info("");
 
 				string? text = Console.ReadLine();
 				if (text == null)
@@ -103,8 +104,28 @@ namespace MarkdownLYT
 				{
 					break;
 				}
-				else
+				else if (command == E_COMMAND.REPLACE)
 				{
+					RunCommandReplace();
+				}
+				else if (command == E_COMMAND.MOC)
+				{
+					RunCommandMOC();
+				}
+				else if (command == E_COMMAND.TODAY)
+				{
+					RunCommandToday();
+				}
+				else if (command == E_COMMAND.MONTH)
+				{
+					RunCommandMonth();
+				}
+				else if (command == E_COMMAND.NEXT_MONTH)
+				{
+					RunCommandNextMonth();
+				}
+				else
+						{
 					Log.Info("Unknown command");
 				}
 			}
@@ -119,12 +140,49 @@ namespace MarkdownLYT
 			// Update tag file
 			var allTags = workspace.GetAllTags();
 
+			// replace file and directory
+
 			// Update home and MOC
 			workspace.UpdateAllMocFiles();
 
 			// Update breadcrumb trail
 
-			// replace file and directory
+		}
+
+		static void RunCommandReplace()
+		{
+			//TODO
+		}
+
+		static void RunCommandMOC()
+		{
+			//TODO
+
+		}
+
+		static void RunCommandToday()
+		{
+			var today = DateTime.Today;
+			var year = today.Year;
+			//TODO
+
+
+		}
+		static void RunCommandMonth()
+		{
+			var today = DateTime.Today;
+			var month = today.Month;
+
+			//TODO
+
+		}
+
+		static void RunCommandNextMonth()
+		{
+			var today = DateTime.Today;
+
+			//TODO
+
 		}
 	}
 }
