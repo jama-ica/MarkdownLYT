@@ -7,10 +7,10 @@ using System.Diagnostics;
 
 namespace MarkdownLYT.Tag
 {
-	internal class RootTagLayerInfo : TagLayerInfo
+	internal class RootNoteLayerInfo : NoteLayerInfo
 	{
 		// Constructor
-		public RootTagLayerInfo(string path)
+		public RootNoteLayerInfo(string path)
 			: base(path, "Home", null)
 		{
 		}

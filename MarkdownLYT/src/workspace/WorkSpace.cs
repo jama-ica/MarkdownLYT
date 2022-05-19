@@ -14,7 +14,7 @@ namespace MarkdownLYT
 
 		string path;
 		List<NoteBook> notes;
-		RootTagLayerInfo? rootTagLayer;
+		RootNoteLayerInfo? rootTagLayer;
 
 		public WorkSpace()
 		{
@@ -92,7 +92,7 @@ namespace MarkdownLYT
 			}
 		}
 
-		void UpdateMocFiles(TagLayerInfo tagLayer)
+		void UpdateMocFiles(NoteLayerInfo tagLayer)
 		{
 			var mocFile = new MocFile(tagLayer.mocFile.path);
 			mocFile.UpdateFile(tagLayer);
@@ -107,9 +107,9 @@ namespace MarkdownLYT
 		{
 		}
 
-		public RootTagLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
+		public RootNoteLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
 		{
-			var rootTagLater = new RootTagLayerInfo(this.path);
+			var rootTagLater = new RootNoteLayerInfo(this.path);
 
 			foreach (var note in notes)
 			{

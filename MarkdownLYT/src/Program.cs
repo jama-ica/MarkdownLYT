@@ -162,26 +162,14 @@ namespace MarkdownLYT
 
 		static void RunCommandToday()
 		{
-			var today = DateTime.Today;
-			var year = today.Year;
-			var month = today.
-			var dt = System.DateTime.ParseExact("201709", "yyyyMM", null);
-			//TODO
-			FileUtil.SafeCreateFile();
-			
-			
-			var proc = new System.Diagnostics.Process();
-
-            proc.StartInfo.FileName = @"c:\MySpace\memo.txt";
-            proc.StartInfo.UseShellExecute = true;
-            proc.Start();
+			DailyNote.Create(DateTime.Today);
+			DailyNote.Open(DateTime.Today);
 		}
 		static void RunCommandMonth()
 		{
 			var today = DateTime.Today;
 			var month = today.Month;
 
-			//TODO
 
 		}
 

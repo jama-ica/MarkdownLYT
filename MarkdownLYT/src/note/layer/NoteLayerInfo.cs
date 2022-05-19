@@ -7,25 +7,25 @@ using MarkdownLYT.Moc;
 
 namespace MarkdownLYT.Tag
 {
-	internal class TagLayerInfo
+	internal class NoteLayerInfo
 	{
 		public string directory { get; }
 		public string name { get; }
 
-		public TagLayerInfo parent { get; }
-		public List<TagLayerInfo> chilidren { get; }
+		public NoteLayerInfo parent { get; }
+		public List<NoteLayerInfo> chilidren { get; }
 
 		public List<NoteBook> notes { get; }
 
 		public MocFile mocFile { get; }
 
 		// Constructor
-		public TagLayerInfo(string directory, string name, TagLayerInfo parent)
+		public NoteLayerInfo(string directory, string name, NoteLayerInfo parent)
 		{
 			this.directory = directory;
 			this.name = name;
 			this.parent = parent;
-			this.chilidren = new List<TagLayerInfo>();
+			this.chilidren = new List<NoteLayerInfo>();
 			this.notes = new List<NoteBook>();
 			this.mocFile = new MocFile(@$"{directory}\{name}.md");
 		}
@@ -47,7 +47,7 @@ namespace MarkdownLYT.Tag
 				var child = GetChild(name);
 				if (child == null)
 				{
-					child = new TagLayerInfo(childPath, name, this);
+					child = new NoteLayerInfo(childPath, name, this);
 					AddChild(child);
 				}
 				child.AddNote(note);
@@ -61,7 +61,7 @@ namespace MarkdownLYT.Tag
 				var child = GetChild(name);
 				if (child == null)
 				{
-					child = new TagLayerInfo(childPath, name, this);
+					child = new NoteLayerInfo(childPath, name, this);
 					AddChild(child);
 				}
 				child.AddLayer(TagPath.RemoveTopLayer(tagText), note);
@@ -69,7 +69,7 @@ namespace MarkdownLYT.Tag
 		}
 
 
-		void AddChild(TagLayerInfo tagLayerInfo)
+		void AddChild(NoteLayerInfo tagLayerInfo)
 		{
 			this.chilidren.Add(tagLayerInfo);
 		}
@@ -79,7 +79,7 @@ namespace MarkdownLYT.Tag
 			this.notes.Add(note);
 		}
 
-		TagLayerInfo? GetChild(string name)
+		NoteLayerInfo? GetChild(string name)
 		{
 			foreach (var child in this.chilidren)
 			{

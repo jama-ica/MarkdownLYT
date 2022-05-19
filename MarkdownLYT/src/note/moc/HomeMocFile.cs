@@ -16,7 +16,7 @@ namespace MarkdownLYT.Moc
 		{
 		}
 
-		public void UpdateFile(RootTagLayerInfo rootTagLayer)
+		public void UpdateFile(RootNoteLayerInfo rootTagLayer)
 		{
 			Log.Debug("HomeFile: update file");
 

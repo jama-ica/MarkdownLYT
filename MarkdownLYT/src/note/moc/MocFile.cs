@@ -17,7 +17,7 @@ namespace MarkdownLYT.Moc
 			this.path = path;
 		}
 
-		public void UpdateFile(TagLayerInfo tagLayer)
+		public void UpdateFile(NoteLayerInfo tagLayer)
 		{
 			Log.Debug($"MocFile: update file: {tagLayer.name}");
 
