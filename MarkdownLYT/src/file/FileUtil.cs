@@ -7,7 +7,7 @@ using System.IO;
 
 namespace MarkdownLYT
 {
-	internal class FiltUtil
+	internal class FileUtil
 	{
 		public static void SafeCreateFile(string path)
 		{
@@ -20,7 +20,7 @@ namespace MarkdownLYT
 			var dir = file.Directory;
 			if (dir == null)
 			{
-				throw new Exception("dir is null");
+				throw new Exception("directory is null");
 			}
 
 			if (!dir.Exists)

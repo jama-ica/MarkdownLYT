@@ -10,7 +10,7 @@ namespace MarkdownLYT.Tag
 	internal class NoteLayerInfo
 	{
 		public string directory { get; }
-		public string name { get; }
+		public string tagName { get; }
 
 		public NoteLayerInfo parent { get; }
 		public List<NoteLayerInfo> chilidren { get; }
@@ -20,14 +20,14 @@ namespace MarkdownLYT.Tag
 		public MocFile mocFile { get; }
 
 		// Constructor
-		public NoteLayerInfo(string directory, string name, NoteLayerInfo parent)
+		public NoteLayerInfo(string directory, string tagName, NoteLayerInfo parent)
 		{
 			this.directory = directory;
-			this.name = name;
+			this.tagName = tagName;
 			this.parent = parent;
 			this.chilidren = new List<NoteLayerInfo>();
 			this.notes = new List<NoteBook>();
-			this.mocFile = new MocFile(@$"{directory}\{name}.md");
+			this.mocFile = new MocFile(@$"{directory}\{tagName}.md");
 		}
 
 		public virtual bool IsRoot()
@@ -69,9 +69,9 @@ namespace MarkdownLYT.Tag
 		}
 
 
-		void AddChild(NoteLayerInfo tagLayerInfo)
+		void AddChild(NoteLayerInfo noteLayer)
 		{
-			this.chilidren.Add(tagLayerInfo);
+			this.chilidren.Add(noteLayer);
 		}
 
 		void AddNote(NoteBook note)
@@ -83,12 +83,28 @@ namespace MarkdownLYT.Tag
 		{
 			foreach (var child in this.chilidren)
 			{
-				if (child.name == name)
+				if (child.tagName == name)
 				{
 					return child;
 				}
 			}
 			return null;
+		}
+
+		public bool GetAllTags(List<string> allTags)
+		{
+			if (allTags == null)
+			{
+				throw new Exception("list is null");
+			}
+
+			allTags.Add(tagName);
+
+			foreach (var child in chilidren)
+			{
+				child.GetAllTags(allTags);
+			}
+			return true;
 		}
 	}
 }

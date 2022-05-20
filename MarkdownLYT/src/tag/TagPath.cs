@@ -30,7 +30,7 @@ namespace MarkdownLYT.Tag
 			{
 				return path;
 			}
-			return path[pos..];
+			return path[..pos];
 		}
 
 		public static string RemoveTopLayer(string path)
@@ -38,6 +38,12 @@ namespace MarkdownLYT.Tag
 			int pos = path.IndexOf('/');
 			if (pos == -1)
 			{
+				return "";
+			}
+			pos++;
+			if (path.Length <= pos)
+			{
+				Log.Warn($"unexpect path = {path}");
 				return "";
 			}
 			return path[pos..];

@@ -37,6 +37,11 @@ namespace MarkdownLYT
 			return true;
 		}
 
+		public void UpdateBreadcrumbTrail(NoteLayerInfo noteLayer)
+		{
+			BreadcrumbTrail.AddBreadcrumbTrail(this.file, noteLayer);
+		}
+
 		public string GetFileName()
 		{
 			return this.file.Name;

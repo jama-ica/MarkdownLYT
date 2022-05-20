@@ -17,54 +17,54 @@ namespace MarkdownLYT.Moc
 			this.path = path;
 		}
 
-		public void UpdateFile(NoteLayerInfo tagLayer)
+		public void UpdateFile(NoteLayerInfo noteLayer)
 		{
-			Log.Debug($"MocFile: update file: {tagLayer.name}");
+			Log.Debug($"MocFile: update file: {noteLayer.tagName}");
 
 			if (!File.Exists(this.path))
 			{
-				FiltUtil.SafeCreateFile(this.path);
+				FileUtil.SafeCreateFile(this.path);
 			}
 
 			using (var sw = new StreamWriter(this.path, append: false, Encoding.UTF8))
 			{
 				// add breadcrumb trail
-				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(tagLayer);
+				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(noteLayer);
 				sw.WriteLine(breadcrumb);
 				sw.WriteLine();
 
 				// add title
-				sw.WriteLine($"# {tagLayer.name}");
+				sw.WriteLine($"# {noteLayer.tagName}");
 				sw.WriteLine();
 
 				// add note link
-				if (0 < tagLayer.notes.Count)
+				if (0 < noteLayer.notes.Count)
 				{
 					sw.WriteLine("notes");
 					sw.WriteLine();
 				}
-				foreach (var note in tagLayer.notes)
+				foreach (var note in noteLayer.notes)
 				{
-					var relativePath = note.GetRelativePath(tagLayer.directory);
+					var relativePath = note.GetRelativePath(noteLayer.directory);
 					sw.WriteLine($"[{note.GetName()}]({relativePath})");
 				}
-				if (0 < tagLayer.notes.Count)
+				if (0 < noteLayer.notes.Count)
 				{
 					sw.WriteLine();
 				}
 
 				// add moc link
-				if (0 < tagLayer.chilidren.Count)
+				if (0 < noteLayer.chilidren.Count)
 				{
 					sw.WriteLine("moc");
 					sw.WriteLine();
 				}
-				foreach (var child in tagLayer.chilidren)
+				foreach (var child in noteLayer.chilidren)
 				{
-					var relativePath = child.mocFile.GetRelativePath(tagLayer.directory);
-					sw.WriteLine($"[{child.name}]({relativePath})");
+					var relativePath = child.mocFile.GetRelativePath(noteLayer.directory);
+					sw.WriteLine($"[{child.tagName}]({relativePath})");
 				}
-				if (0 < tagLayer.chilidren.Count)
+				if (0 < noteLayer.chilidren.Count)
 				{
 					sw.WriteLine();
 				}
@@ -74,6 +74,12 @@ namespace MarkdownLYT.Moc
 		public string GetRelativePath(string currentDir)
 		{
 			return Path.GetRelativePath(currentDir, this.path);
+		}
+
+		public static bool IsMocFile(string filePath)
+		{
+			var splits = filePath.Split(Path.DirectorySeparatorChar);
+			return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
 		}
 
 	}

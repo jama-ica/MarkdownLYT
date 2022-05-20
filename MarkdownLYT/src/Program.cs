@@ -75,6 +75,7 @@ namespace MarkdownLYT
 		{
 			while (true)
 			{
+				Log.Info("");
 				Log.Info("Please input command");
 				foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
 				{
@@ -125,8 +126,8 @@ namespace MarkdownLYT
 					RunCommandNextMonth();
 				}
 				else
-						{
-					Log.Info("Unknown command");
+				{
+					Log.Warn("Unknown command");
 				}
 			}
 		}
@@ -138,15 +139,16 @@ namespace MarkdownLYT
 			workspace.Load(workspacePath);
 
 			// Update tag file
-			var allTags = workspace.GetAllTags();
+			workspace.UpdateTagFile();
 
 			// replace file and directory
+			workspace.ReplaceAllNotes();
 
 			// Update home and MOC
 			workspace.UpdateAllMocFiles();
 
 			// Update breadcrumb trail
-
+			workspace.UpdateAllNoteBooks();
 		}
 
 		static void RunCommandReplace()
@@ -162,23 +164,41 @@ namespace MarkdownLYT
 
 		static void RunCommandToday()
 		{
-			DailyNote.Create(DateTime.Today);
-			DailyNote.Open(DateTime.Today);
+			DiaryNote.Create(DateTime.Today);
+			//DiaryNote.Open(DateTime.Today);
 		}
 		static void RunCommandMonth()
 		{
 			var today = DateTime.Today;
-			var month = today.Month;
+			var day = new DateTime(today.Year, today.Month, 1);
 
+			for (int i = 0; i < 31; i++)
+			{
+				DiaryNote.Create(day);
 
+				day = day.AddDays(1);
+				if(day.Month != today.Month)
+				{
+					break;
+				}
+			}
 		}
 
 		static void RunCommandNextMonth()
 		{
 			var today = DateTime.Today;
+			var day = new DateTime(today.Year, today.Month+1, 1);
 
-			//TODO
+			for (int i = 0; i < 31; i++)
+			{
+				DiaryNote.Create(day);
 
+				day = day.AddDays(1);
+				if (day.Month != today.Month)
+				{
+					break;
+				}
+			}
 		}
 	}
 }

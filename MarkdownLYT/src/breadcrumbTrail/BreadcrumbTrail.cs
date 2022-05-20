@@ -10,11 +10,21 @@ namespace MarkdownLYT
 {
 	class BreadcrumbTrail
 	{
-		const string TopLinkName = "[Home]";
-
-		public static void AddBreadcrumbTrail(FileInfo file, TagLayerInfo tagLayer)
+		public static void AddBreadcrumbTrail(FileInfo file, NoteLayerInfo noteLayer)
 		{
-			var breadcrumbTrail = CreateBreadcrumbTrail(tagLayer);
+			if (noteLayer == null)
+			{
+				throw new Exception("noteLayer == null");
+			}
+			if (file == null)
+			{
+				throw new Exception("file == null");
+			}
+			if (!File.Exists(file.FullName))
+			{
+				throw new FileNotFoundException();
+			}
+			var breadcrumbTrail = CreateBreadcrumbTrail(noteLayer);
 
 			E_BREADCRUMB_TRAIL_STATE state;
 			using (var sr = new StreamReader(file.FullName))
@@ -42,10 +52,13 @@ namespace MarkdownLYT
 
 		static void AppendBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
 		{
-			using (var sw = new StreamWriter(file.FullName, append:true, Encoding.UTF8))
+			var alltext = System.IO.File.ReadAllText(file.FullName, Encoding.UTF8);
+
+			using (var sw = new StreamWriter(file.FullName, append:false, Encoding.UTF8))
 			{
 				sw.WriteLine(breadcrumbTrail);
 				sw.WriteLine("");
+				sw.WriteLine(alltext);
 			}
 		}
 
@@ -55,7 +68,7 @@ namespace MarkdownLYT
 
 			lines[0] = breadcrumbTrail;
 
-			using (var sw = new StreamWriter(file.FullName, append: false, Encoding.UTF8))
+			using (var sw = new StreamWriter(file.FullName, append:false, Encoding.UTF8))
 			{
 				foreach (var line in lines)
 				{
@@ -89,11 +102,11 @@ namespace MarkdownLYT
 			return E_BREADCRUMB_TRAIL_STATE.INCORRECT;
 		}
 
-		public static string CreateBreadcrumbTrail(TagLayerInfo tagLayer)
+		public static string CreateBreadcrumbTrail(NoteLayerInfo noteLayer)
 		{
 			var sb = new StringBuilder();
 
-			var target = tagLayer;
+			var target = noteLayer;
 			while(true)
 			{
 				var parent = target.parent;
@@ -108,7 +121,7 @@ namespace MarkdownLYT
 				}
 
 				var relativePath = parent.mocFile.GetRelativePath(target.directory);
-				sb.Insert(0, $"[{parent.name}]({relativePath})");
+				sb.Insert(0, $"[{parent.tagName}]({relativePath})");
 
 				target = parent;
 			}

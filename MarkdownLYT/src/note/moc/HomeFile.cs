@@ -8,10 +8,10 @@ using MarkdownLYT.Tag;
 
 namespace MarkdownLYT.Moc
 {
-	internal class HomeMocFile : MocFile
+	internal class HomeFile : MocFile
 	{
 
-		public HomeMocFile(string path)
+		public HomeFile(string path)
 			: base(path)
 		{
 		}
@@ -22,7 +22,7 @@ namespace MarkdownLYT.Moc
 
 			if (!File.Exists(this.path))
 			{
-				using (File.Create(this.path));
+				FileUtil.SafeCreateFile(this.path);
 			}
 
 			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
@@ -59,13 +59,20 @@ namespace MarkdownLYT.Moc
 				}
 				foreach (var childLayer in rootTagLayer.chilidren)
 				{
-					sw.WriteLine($"[{childLayer.name}](./{childLayer.name}/{childLayer.name}.md)");
+					sw.WriteLine($"[{childLayer.tagName}](./{childLayer.tagName}/{childLayer.tagName}.md)");
 				}
 				if (0 < rootTagLayer.chilidren.Count)
 				{
 					sw.WriteLine();
 				}
 			}
+		}
+
+
+		public static bool IsHome(string filePath)
+		{
+			var splits = filePath.Split(Path.DirectorySeparatorChar);
+			return splits[splits.Length - 1] == "Home.md";
 		}
 	}
 }

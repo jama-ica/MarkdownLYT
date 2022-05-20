@@ -14,6 +14,7 @@ namespace MarkdownLYT
 		TODAY,
 		MONTH,
 		NEXT_MONTH,
+		BACKUP,
 		EXIT,
 	};
 
@@ -30,6 +31,7 @@ namespace MarkdownLYT
 			case E_COMMAND.TODAY:	return "today"; 
 			case E_COMMAND.MONTH:	return "month"; 
 			case E_COMMAND.NEXT_MONTH:	return "next month";
+			case E_COMMAND.BACKUP:	return "backup";
 				default:
 				throw new Exception("unknow command");
 			}
@@ -42,6 +44,7 @@ namespace MarkdownLYT
 		static string[] todayAliasNames = { "to" };
 		static string[] monthAliasNames = { "mo" };
 		static string[] nextMonthAliasNames = { "nmo", };
+		static string[] backupAliasNames = { "ba", "back", };
 
 		public static string[] GetAliasNames(this E_COMMAND command)
 		{
@@ -54,6 +57,7 @@ namespace MarkdownLYT
 				case E_COMMAND.TODAY:	return todayAliasNames;
 				case E_COMMAND.MONTH:	return monthAliasNames;
 				case E_COMMAND.NEXT_MONTH: return nextMonthAliasNames;
+				case E_COMMAND.BACKUP:	return backupAliasNames;
 				default:
 					throw new Exception("unknow command");
 			}
@@ -70,6 +74,7 @@ namespace MarkdownLYT
 				case E_COMMAND.TODAY:	return "... Create or open today note";
 				case E_COMMAND.MONTH:	return "... Create notes for this month";
 				case E_COMMAND.NEXT_MONTH: return "... Create notes for next month";
+				case E_COMMAND.BACKUP:	return "... Create backup of all moc and notes";
 				default:
 					throw new Exception("unknow command");
 			}

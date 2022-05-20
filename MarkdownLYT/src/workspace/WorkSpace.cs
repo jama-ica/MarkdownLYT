@@ -13,20 +13,20 @@ namespace MarkdownLYT
 	{
 
 		string path;
-		List<NoteBook> notes;
-		RootNoteLayerInfo? rootTagLayer;
+		//List<NoteBook> notebooks;
+		RootNoteLayerInfo? rootNoteLayer;
 
 		public WorkSpace()
 		{
 			this.path = String.Empty;
-			this.notes = new List<NoteBook>();
-			this.rootTagLayer = null;
+			//this.notebooks = new List<NoteBook>();
+			this.rootNoteLayer = null;
 		}
 
 		public bool Load(string path)
 		{
 			this.path = path;
-			this.notes.Clear();
+			var notebooks = new List<NoteBook>();
 
 			if (!Directory.Exists(path))
 			{
@@ -34,16 +34,26 @@ namespace MarkdownLYT
 				return false;
 			}
 			
-			Log.Info($"Workspace: load: {path}");
-			
 			var filePaths = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories);
 			foreach (string filePath in filePaths)
 			{
+				if (DiaryNote.IsDiaryFile(filePath))
+				{
+					continue;
+				}
+				if (MocFile.IsMocFile(filePath))
+				{
+					continue;
+				}
+				if (HomeFile.IsHome(filePath))
+				{
+					continue;
+				}
 				try
 				{
 					var notes = new NoteBook(filePath);
 					notes.Load();
-					this.notes.Add(notes);
+					notebooks.Add(notes);
 				}
 				catch (FileNotFoundException)
 				{
@@ -51,53 +61,45 @@ namespace MarkdownLYT
 				}
 			}
 
-			this.rootTagLayer = CreateRootlTagLayer(this.notes);
+			this.rootNoteLayer = CreateRootlTagLayer(notebooks);
 			return true;
 		}
 
-		public List<TagInfo> GetAllTags()
+		List<string> GetAllTags()
 		{
-			var allTags = new List<Tag.TagInfo>();
-
-			foreach(var lytFile in this.notes )
+			if (this.rootNoteLayer == null)
 			{
-				var tags = lytFile.tags;
-				foreach (var tag in tags)
-				{
-					if (allTags.Contains(tag))
-					{
-						continue;
-					}
-					allTags.Add(tag);
-				}
+				Log.Error("rootNoteLayer == null");
+				return null;
 			}
 
-			allTags.OrderBy(tag => tag.fullPath);
+			var allTags = new List<string>();
+			this.rootNoteLayer.GetAllTags(allTags);
 			return allTags;
 		}
 
 		public void UpdateAllMocFiles()
 		{
-			if (this.rootTagLayer == null)
+			if (this.rootNoteLayer == null)
 			{
-				Log.Error("Workspace: not initialzed");
+				throw new Exception("rootNoteLayer == null");
 			}
 
-			var homeFile = new HomeMocFile(this.rootTagLayer.mocFile.path);
-			homeFile.UpdateFile(this.rootTagLayer);
+			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.path);
+			homeFile.UpdateFile(this.rootNoteLayer);
 
-			foreach (var childLayer in this.rootTagLayer.chilidren)
+			foreach (var childLayer in this.rootNoteLayer.chilidren)
 			{
 				UpdateMocFiles(childLayer);
 			}
 		}
 
-		void UpdateMocFiles(NoteLayerInfo tagLayer)
+		void UpdateMocFiles(NoteLayerInfo noteLayer)
 		{
-			var mocFile = new MocFile(tagLayer.mocFile.path);
-			mocFile.UpdateFile(tagLayer);
+			var mocFile = new MocFile(noteLayer.mocFile.path);
+			mocFile.UpdateFile(noteLayer);
 
-			foreach (var child in tagLayer.chilidren)
+			foreach (var child in noteLayer.chilidren)
 			{
 				UpdateMocFiles(child);
 			}
@@ -105,11 +107,14 @@ namespace MarkdownLYT
 
 		public void UpdateTagFile()
 		{
+			var tags = GetAllTags();
+			var tagsFile = new TagsFile($@"{GetNoteDirPath()}{Path.DirectorySeparatorChar}tags.md");
+			tagsFile.UpdateFile(tags);
 		}
 
 		public RootNoteLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
 		{
-			var rootTagLater = new RootNoteLayerInfo(this.path);
+			var rootTagLater = new RootNoteLayerInfo(GetNoteDirPath());
 
 			foreach (var note in notes)
 			{
@@ -117,6 +122,54 @@ namespace MarkdownLYT
 			}
 
 			return rootTagLater;
+		}
+
+		public void ReplaceAllNotes()
+		{
+			if (this.rootNoteLayer == null)
+			{
+				throw new Exception("rootNoteLayer == null");
+			}
+			//TODO
+		}
+
+		public void UpdateAllNoteBooks()
+		{
+			if (this.rootNoteLayer == null)
+			{
+				throw new Exception("rootNoteLayer == null");
+			}
+			foreach (var note in this.rootNoteLayer.notes)
+			{
+				note.UpdateBreadcrumbTrail(this.rootNoteLayer);
+			}
+			foreach (var child in this.rootNoteLayer.chilidren)
+			{
+				UpdateNoteBooks(child);
+			}
+		}
+
+
+		void UpdateNoteBooks(NoteLayerInfo noteLayer)
+		{
+			if (noteLayer == null)
+			{
+				throw new Exception("rootNoteLayer == null");
+			}
+
+			foreach (var note in noteLayer.notes)
+			{
+				note.UpdateBreadcrumbTrail(noteLayer);
+			}
+			foreach (var child in noteLayer.chilidren)
+			{
+				UpdateNoteBooks(child);
+			}
+		}
+
+		string GetNoteDirPath()
+		{
+			return $@"{this.path}{Path.DirectorySeparatorChar}note";
 		}
 	}
 }
