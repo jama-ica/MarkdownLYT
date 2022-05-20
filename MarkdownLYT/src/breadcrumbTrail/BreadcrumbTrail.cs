@@ -84,7 +84,7 @@ namespace MarkdownLYT
 			CORRECT,
 		};
 
-		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string text)
+		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string? text)
 		{
 			if (text == null)
 			{
@@ -120,11 +120,12 @@ namespace MarkdownLYT
 					sb.Insert(0, " / ");
 				}
 
-				var relativePath = parent.mocFile.GetRelativePath(target.directory);
+				var relativePath = parent.mocFile.GetRelativePath(noteLayer.directory);
 				sb.Insert(0, $"[{parent.tagName}]({relativePath})");
 
 				target = parent;
 			}
+
 
 			return sb.ToString();
 		}

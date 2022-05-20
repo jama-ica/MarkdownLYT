@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using MarkdownLYT.Note;
 
-namespace MarkdownLYT.Tag
+namespace MarkdownLYT
 {
 	internal class RootNoteLayerInfo : NoteLayerInfo
 	{

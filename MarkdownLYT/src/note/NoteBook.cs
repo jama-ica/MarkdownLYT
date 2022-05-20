@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using MarkdownLYT.Tag;
 
-namespace MarkdownLYT
+namespace MarkdownLYT.Note
 {
-	internal class NoteBook
+	class NoteBook : INote
 	{
 		FileInfo file;
 		public List<TagInfo> tags { get; }
@@ -42,6 +42,11 @@ namespace MarkdownLYT
 			BreadcrumbTrail.AddBreadcrumbTrail(this.file, noteLayer);
 		}
 
+		public string GetFullName()
+		{
+			return this.file.FullName;
+		}
+
 		public string GetFileName()
 		{
 			return this.file.Name;
@@ -52,14 +57,9 @@ namespace MarkdownLYT
 			return this.file.Name[..^3];
 		}
 
-		public string GetPath()
-		{
-			return this.file.FullName;
-		}
-
 		public string GetRelativePath(string currentDir)
 		{
-			return Path.GetRelativePath(currentDir, this.file.FullName);
+			return Path.GetRelativePath(currentDir, GetFullName());
 		}
 
 		void LoadTag(FileInfo file)

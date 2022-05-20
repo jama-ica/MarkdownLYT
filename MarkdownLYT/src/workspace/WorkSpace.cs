@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using MarkdownLYT.Tag;
-using MarkdownLYT.Moc;
+using MarkdownLYT.Note;
 
 namespace MarkdownLYT
 {
@@ -85,7 +85,7 @@ namespace MarkdownLYT
 				throw new Exception("rootNoteLayer == null");
 			}
 
-			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.path);
+			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.GetFullName());
 			homeFile.UpdateFile(this.rootNoteLayer);
 
 			foreach (var childLayer in this.rootNoteLayer.chilidren)
@@ -96,7 +96,7 @@ namespace MarkdownLYT
 
 		void UpdateMocFiles(NoteLayerInfo noteLayer)
 		{
-			var mocFile = new MocFile(noteLayer.mocFile.path);
+			var mocFile = new MocFile(noteLayer.mocFile.GetFullName());
 			mocFile.UpdateFile(noteLayer);
 
 			foreach (var child in noteLayer.chilidren)

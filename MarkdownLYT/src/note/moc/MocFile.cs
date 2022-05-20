@@ -6,27 +6,26 @@ using System.Threading.Tasks;
 using System.IO;
 using MarkdownLYT.Tag;
 
-namespace MarkdownLYT.Moc
+namespace MarkdownLYT.Note
 {
-	internal class MocFile
+	internal class MocFile : INote
 	{
-		public string path { get; }
+		protected FileInfo file;
 
 		public MocFile(string path)
 		{
-			this.path = path;
+			this.file = new FileInfo(path);
 		}
 
 		public void UpdateFile(NoteLayerInfo noteLayer)
 		{
-			Log.Debug($"MocFile: update file: {noteLayer.tagName}");
 
-			if (!File.Exists(this.path))
+			if (!File.Exists(this.file.FullName))
 			{
-				FileUtil.SafeCreateFile(this.path);
+				FileUtil.SafeCreateFile(this.file.FullName);
 			}
 
-			using (var sw = new StreamWriter(this.path, append: false, Encoding.UTF8))
+			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
 			{
 				// add breadcrumb trail
 				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(noteLayer);
@@ -71,16 +70,30 @@ namespace MarkdownLYT.Moc
 			}
 		}
 
-		public string GetRelativePath(string currentDir)
-		{
-			return Path.GetRelativePath(currentDir, this.path);
-		}
-
 		public static bool IsMocFile(string filePath)
 		{
 			var splits = filePath.Split(Path.DirectorySeparatorChar);
 			return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
 		}
 
+		public string GetFullName()
+		{
+			return this.file.FullName;
+		}
+
+		public string GetFileName()
+		{
+			return this.file.Name;
+		}
+
+		public string GetName()
+		{
+			return this.file.Name[..^3];
+		}
+
+		public string GetRelativePath(string currentDir)
+		{
+			return Path.GetRelativePath(currentDir, GetFullName());
+		}
 	}
 }

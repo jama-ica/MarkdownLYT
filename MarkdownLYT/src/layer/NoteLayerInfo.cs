@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MarkdownLYT.Moc;
+using MarkdownLYT.Note;
+using MarkdownLYT.Tag;
 
-namespace MarkdownLYT.Tag
+namespace MarkdownLYT
 {
 	internal class NoteLayerInfo
 	{
 		public string directory { get; }
 		public string tagName { get; }
 
-		public NoteLayerInfo parent { get; }
+		public NoteLayerInfo? parent { get; }
 		public List<NoteLayerInfo> chilidren { get; }
 
 		public List<NoteBook> notes { get; }

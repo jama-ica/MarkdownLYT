@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using MarkdownLYT.Tag;
 
-namespace MarkdownLYT.Moc
+namespace MarkdownLYT.Note
 {
 	internal class HomeFile : MocFile
 	{
@@ -18,14 +18,13 @@ namespace MarkdownLYT.Moc
 
 		public void UpdateFile(RootNoteLayerInfo rootTagLayer)
 		{
-			Log.Debug("HomeFile: update file");
 
-			if (!File.Exists(this.path))
+			if (!File.Exists(this.file.FullName))
 			{
-				FileUtil.SafeCreateFile(this.path);
+				FileUtil.SafeCreateFile(this.file.FullName);
 			}
 
-			using (var sw = new StreamWriter(this.path, append:false, Encoding.UTF8))
+			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
 			{
 				//// add breadcrumb trail
 				//var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(rootTagLayer);
@@ -44,7 +43,7 @@ namespace MarkdownLYT.Moc
 				}
 				foreach (var note in rootTagLayer.notes)
 				{
-					sw.WriteLine($"[{note.GetName()}]({note.GetPath()})");
+					sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
 				}
 				if (0 < rootTagLayer.notes.Count)
 				{
