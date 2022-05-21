@@ -39,7 +39,11 @@ namespace MarkdownLYT.Note
 
 		public void UpdateBreadcrumbTrail(NoteLayerInfo noteLayer)
 		{
-			BreadcrumbTrail.AddBreadcrumbTrail(this.file, noteLayer);
+			if (0 == this.tags.Count)
+			{
+				throw new Exception("tags count is 0");
+			}
+			BreadcrumbTrail.AddBreadcrumbTrail(this.file, tags, noteLayer);
 		}
 
 		public string GetFullName()

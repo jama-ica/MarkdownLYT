@@ -28,7 +28,7 @@ namespace MarkdownLYT.Note
 			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
 			{
 				// add breadcrumb trail
-				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(noteLayer);
+				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(file, noteLayer);
 				sw.WriteLine(breadcrumb);
 				sw.WriteLine();
 
@@ -44,7 +44,7 @@ namespace MarkdownLYT.Note
 				}
 				foreach (var note in noteLayer.notes)
 				{
-					var relativePath = note.GetRelativePath(noteLayer.directory);
+					var relativePath = note.GetRelativePath(file.DirectoryName);
 					sw.WriteLine($"[{note.GetName()}]({relativePath})");
 				}
 				if (0 < noteLayer.notes.Count)
@@ -60,7 +60,7 @@ namespace MarkdownLYT.Note
 				}
 				foreach (var child in noteLayer.chilidren)
 				{
-					var relativePath = child.mocFile.GetRelativePath(noteLayer.directory);
+					var relativePath = child.mocFile.GetRelativePath(file.DirectoryName);
 					sw.WriteLine($"[{child.tagName}]({relativePath})");
 				}
 				if (0 < noteLayer.chilidren.Count)

@@ -10,12 +10,31 @@ namespace MarkdownLYT
 {
 	class BreadcrumbTrail
 	{
-		public static void AddBreadcrumbTrail(FileInfo file, NoteLayerInfo noteLayer)
+		public static void AddBreadcrumbTrail(FileInfo file, List<TagInfo> tags, RootNoteLayerInfo rootLayer)
+		{
+			if (tags == null)
+			{
+				throw new Exception("tag == null");
+			}
+
+			var breadcrumbTrail = CreateBreadcrumbTrail(file, tag, rootLayer);
+
+			UpdateBreadcrumbTrail(breadcrumbTrail, file);
+		}
+
+		public static void AddBreadcrumbTrail(FileInfo file, NoteLayerInfo noteLayer, RootNoteLayerInfo rootLayer)
 		{
 			if (noteLayer == null)
 			{
-				throw new Exception("noteLayer == null");
+				throw new Exception("noteLayer is null");
 			}
+
+			var breadcrumbTrail = CreateBreadcrumbTrail(file, noteLayer);
+			UpdateBreadcrumbTrail(breadcrumbTrail, file);
+		}
+
+		static string CreateBreadcrumbTrail(FileInfo file, TagInfo tag, RootNoteLayerInfo rootNoteLayer)
+		{
 			if (file == null)
 			{
 				throw new Exception("file == null");
@@ -24,16 +43,65 @@ namespace MarkdownLYT
 			{
 				throw new FileNotFoundException();
 			}
-			var breadcrumbTrail = CreateBreadcrumbTrail(noteLayer);
 
-			E_BREADCRUMB_TRAIL_STATE state;
-			using (var sr = new StreamReader(file.FullName))
+			var sb = new StringBuilder();
+
+			// Add top lin
+			var relativePath = rootNoteLayer.mocFile.GetRelativePath(file.DirectoryName);
+			sb.Append($"[Home]({relativePath})");
+
+			var layers = tag.layers;
+			NoteLayerInfo parentLayer = rootNoteLayer;
+			foreach (var layer in layers)
 			{
-				var firstLine = sr.ReadLine();
-				state = CheckBreadcrumbTrail(breadcrumbTrail, firstLine);
+				var noteLayer = parentLayer.FindChildNoteLayer(layer);
+				if (noteLayer == null)
+				{
+					Log.Warn($"BreadcrumbTrail: tag name: {layer} is not found");
+					break;
+				}
+
+				relativePath = noteLayer.mocFile.GetRelativePath(file.DirectoryName);
+				sb.Append($"[{layer}]({relativePath})");
+
+				parentLayer = noteLayer;
 			}
 
-			switch(state)
+			return sb.ToString();
+		}
+
+		public static string CreateBreadcrumbTrail(FileInfo file, NoteLayerInfo noteLayer)
+		{
+			var sb = new StringBuilder();
+
+			var target = noteLayer;
+			while (true)
+			{
+				var parent = target.parent;
+				if (parent == null)
+				{
+					break;
+				}
+
+				if (sb.Length != 0)
+				{
+					sb.Insert(0, " / ");
+				}
+
+				var relativePath = parent.mocFile.GetRelativePath(file.DirectoryName);
+				sb.Insert(0, $"[{parent.tagName}]({relativePath})");
+
+				target = parent;
+			}
+
+			return sb.ToString();
+		}
+
+		static void UpdateBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
+		{
+			E_BREADCRUMB_TRAIL_STATE state = CheckBreadcrumbTrail(breadcrumbTrail, file);
+
+			switch (state)
 			{
 				case E_BREADCRUMB_TRAIL_STATE.NONE:
 					AppendBreadcrumbTrail(breadcrumbTrail, file);
@@ -52,7 +120,7 @@ namespace MarkdownLYT
 
 		static void AppendBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
 		{
-			var alltext = System.IO.File.ReadAllText(file.FullName, Encoding.UTF8);
+			var alltext = File.ReadAllText(file.FullName, Encoding.UTF8);
 
 			using (var sw = new StreamWriter(file.FullName, append:false, Encoding.UTF8))
 			{
@@ -64,13 +132,13 @@ namespace MarkdownLYT
 
 		static void ReplaceBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
 		{
-			string[] lines = System.IO.File.ReadAllLines(file.FullName, Encoding.UTF8);
+			string[] alllines = File.ReadAllLines(file.FullName, Encoding.UTF8);
 
-			lines[0] = breadcrumbTrail;
+			alllines[0] = breadcrumbTrail;
 
 			using (var sw = new StreamWriter(file.FullName, append:false, Encoding.UTF8))
 			{
-				foreach (var line in lines)
+				foreach (var line in alllines)
 				{
 					sw.WriteLine(line);
 				}
@@ -84,17 +152,28 @@ namespace MarkdownLYT
 			CORRECT,
 		};
 
-		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string? text)
+		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, FileInfo file)
 		{
-			if (text == null)
+			E_BREADCRUMB_TRAIL_STATE state;
+			using (var sr = new StreamReader(file.FullName))
+			{
+				var firstLine = sr.ReadLine();
+				state = CheckBreadcrumbTrail(breadcrumbTrail, firstLine);
+			}
+			return state;
+		}
+
+		static E_BREADCRUMB_TRAIL_STATE CheckBreadcrumbTrail(string breadcrumbTrail, string? lineText)
+		{
+			if (lineText == null)
 			{
 				return E_BREADCRUMB_TRAIL_STATE.NONE;
 			}
-			if (!text.StartsWith("[Home]("))
+			if (!lineText.StartsWith("[Home]("))
 			{
 				return E_BREADCRUMB_TRAIL_STATE.NONE;
 			}
-			if (breadcrumbTrail == text)
+			if (breadcrumbTrail == lineText)
 			{
 				return E_BREADCRUMB_TRAIL_STATE.CORRECT;
 			}
@@ -102,32 +181,6 @@ namespace MarkdownLYT
 			return E_BREADCRUMB_TRAIL_STATE.INCORRECT;
 		}
 
-		public static string CreateBreadcrumbTrail(NoteLayerInfo noteLayer)
-		{
-			var sb = new StringBuilder();
 
-			var target = noteLayer;
-			while(true)
-			{
-				var parent = target.parent;
-				if (parent == null)
-				{
-					break;
-				}
-
-				if(sb.Length != 0)
-				{
-					sb.Insert(0, " / ");
-				}
-
-				var relativePath = parent.mocFile.GetRelativePath(noteLayer.directory);
-				sb.Insert(0, $"[{parent.tagName}]({relativePath})");
-
-				target = parent;
-			}
-
-
-			return sb.ToString();
-		}
 	}
 }

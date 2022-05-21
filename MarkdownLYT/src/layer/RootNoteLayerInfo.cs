@@ -25,7 +25,7 @@ namespace MarkdownLYT
 		{
 			foreach (var tag in note.tags)
 			{
-				AddLayer(tag.fullPath, note);
+				AddLayer(tag.fullName, note);
 			}
 		}
 	}

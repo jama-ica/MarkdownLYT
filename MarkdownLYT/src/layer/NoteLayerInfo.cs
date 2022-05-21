@@ -10,7 +10,6 @@ namespace MarkdownLYT
 {
 	internal class NoteLayerInfo
 	{
-		public string directory { get; }
 		public string tagName { get; }
 
 		public NoteLayerInfo? parent { get; }
@@ -21,14 +20,13 @@ namespace MarkdownLYT
 		public MocFile mocFile { get; }
 
 		// Constructor
-		public NoteLayerInfo(string directory, string tagName, NoteLayerInfo parent)
+		public NoteLayerInfo(string path, string tagName, NoteLayerInfo? parent)
 		{
-			this.directory = directory;
 			this.tagName = tagName;
 			this.parent = parent;
 			this.chilidren = new List<NoteLayerInfo>();
 			this.notes = new List<NoteBook>();
-			this.mocFile = new MocFile(@$"{directory}\{tagName}.md");
+			this.mocFile = new MocFile(@$"{path}\{tagName}.md");
 		}
 
 		public virtual bool IsRoot()
@@ -45,7 +43,7 @@ namespace MarkdownLYT
 			if (1 == layers.Length)
 			{
 				var name = layers[0];
-				var child = GetChild(name);
+				var child = FindChildNoteLayer(name);
 				if (child == null)
 				{
 					child = new NoteLayerInfo(childPath, name, this);
@@ -59,7 +57,7 @@ namespace MarkdownLYT
 			{
 				//Debug.Assert(index > -1);
 				var name = TagPath.GetTopLayerName(tagText);
-				var child = GetChild(name);
+				var child = FindChildNoteLayer(name);
 				if (child == null)
 				{
 					child = new NoteLayerInfo(childPath, name, this);
@@ -80,19 +78,7 @@ namespace MarkdownLYT
 			this.notes.Add(note);
 		}
 
-		NoteLayerInfo? GetChild(string name)
-		{
-			foreach (var child in this.chilidren)
-			{
-				if (child.tagName == name)
-				{
-					return child;
-				}
-			}
-			return null;
-		}
-
-		public bool GetAllTags(List<string> allTags)
+		public bool AddAllTags(List<string> allTags)
 		{
 			if (allTags == null)
 			{
@@ -103,9 +89,21 @@ namespace MarkdownLYT
 
 			foreach (var child in chilidren)
 			{
-				child.GetAllTags(allTags);
+				child.AddAllTags(allTags);
 			}
 			return true;
+		}
+
+		public NoteLayerInfo? FindChildNoteLayer(string tagName)
+		{
+			foreach (var child in chilidren)
+			{
+				if (child.tagName == tagName)
+				{
+					return child;
+				}
+			}
+			return null;
 		}
 	}
 }

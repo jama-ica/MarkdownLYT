@@ -8,13 +8,13 @@ namespace MarkdownLYT.Tag
 {
 	internal class TagInfo : IEqualityComparer<TagInfo>
 	{
-		public string fullPath { get; }
+		public string fullName { get; }
 		public List<string> layers { get; }
 
-		public TagInfo(string text)
+		public TagInfo(string fullName)
 		{
-			this.fullPath = text;
-			this.layers = this.fullPath.Split('/').ToList();
+			this.fullName = fullName;
+			this.layers = this.fullName.Split('/').ToList();
 		}
 
 		public string GetName()
@@ -63,14 +63,21 @@ namespace MarkdownLYT.Tag
 			return sb.ToString();
 		}
 
+
+
+
 		public bool Equals(TagInfo x, TagInfo y)
 		{
-			return x.fullPath == y.fullPath;
+			if (x == null || y == null)
+			{
+				return false;
+			}
+			return x.fullName == y.fullName;
 		}
 
 		public int GetHashCode(TagInfo obj)
 		{
-			return obj.fullPath.GetHashCode();
+			return obj.fullName.GetHashCode();
 		}
 
 	}
