@@ -17,9 +17,52 @@ namespace MarkdownLYT
 				throw new Exception("tag == null");
 			}
 
-			var breadcrumbTrail = CreateBreadcrumbTrail(file, tag, rootLayer);
-
-			UpdateBreadcrumbTrail(breadcrumbTrail, file);
+			var breadcrumbTrails = new List<string>();
+			foreach(var tag in tags)
+			{
+				var breadcrumbTrail = CreateBreadcrumbTrail(file, tag, rootLayer);
+				breadcrumbTrails.Add(breadcrumbTrail);
+			}
+			
+			string[] alllines = File.ReadAllLines(file.FullName, Encoding.UTF8);
+			int line = 0;
+			bool isComplate = true;;
+			foreach(var breadcrumbTrail in breadcrumbTrails)
+			{
+				if(line >= alllines.Length)
+				{
+					isComplate = false;
+					break;
+				}
+				if(alllines[line]!=breadcrumbTrail)
+				{
+					isComplate = false;
+					break;
+				}
+				line++;
+			}
+			
+			if(isComplate)
+			{
+				return;
+			}
+			
+			using (var sw = new StreamWriter(file.FullName, append:false, Encoding.UTF8))
+			{
+				foreach(var breadcrumbTrail in breadcrumbTrails)
+				{
+					sw.WriteLine(breadcrumbTrail);
+				}
+				sw.WriteLine();
+				foreach(var lineText in alllines)
+				{
+					if(lineText.StartsWith("[Home]("))
+					{
+						continue;
+					}
+					sw.WriteLine(lineText);
+				}
+			}
 		}
 
 		public static void AddBreadcrumbTrail(FileInfo file, NoteLayerInfo noteLayer, RootNoteLayerInfo rootLayer)
