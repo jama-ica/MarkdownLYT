@@ -25,7 +25,7 @@ namespace MarkdownLYT.Note
 				FileUtil.SafeCreateFile(this.file.FullName);
 			}
 
-			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
+			using (var sw = new StreamWriter(this.file.FullName, append: false, Encoding.UTF8))
 			{
 				// add breadcrumb trail
 				var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(file, noteLayer);
@@ -45,7 +45,7 @@ namespace MarkdownLYT.Note
 				foreach (var note in noteLayer.notes)
 				{
 					var relativePath = note.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($"[{note.GetName()}]({relativePath})");
+					sw.WriteLine($@"[{note.GetName()}]({relativePath})");
 				}
 				if (0 < noteLayer.notes.Count)
 				{
@@ -61,7 +61,7 @@ namespace MarkdownLYT.Note
 				foreach (var child in noteLayer.chilidren)
 				{
 					var relativePath = child.mocFile.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($"[{child.tagName}]({relativePath})");
+					sw.WriteLine($@"[{child.tagName}]({relativePath})");
 				}
 				if (0 < noteLayer.chilidren.Count)
 				{
@@ -74,6 +74,11 @@ namespace MarkdownLYT.Note
 		{
 			var splits = filePath.Split(Path.DirectorySeparatorChar);
 			return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
+		}
+
+		public string GetDirectoryName()
+		{
+			return this.file.DirectoryName;
 		}
 
 		public string GetFullName()
@@ -93,7 +98,9 @@ namespace MarkdownLYT.Note
 
 		public string GetRelativePath(string currentDir)
 		{
-			return Path.GetRelativePath(currentDir, GetFullName());
+			var path = Path.GetRelativePath(currentDir, GetFullName());
+			var path2 = path.Replace(Path.DirectorySeparatorChar, '/');
+			return path;
 		}
 	}
 }

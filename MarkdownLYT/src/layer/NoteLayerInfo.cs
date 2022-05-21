@@ -26,7 +26,7 @@ namespace MarkdownLYT
 			this.parent = parent;
 			this.chilidren = new List<NoteLayerInfo>();
 			this.notes = new List<NoteBook>();
-			this.mocFile = new MocFile(@$"{path}\{tagName}.md");
+			this.mocFile = new MocFile(@$"{path}{Path.DirectorySeparatorChar}{tagName}.md");
 		}
 
 		public virtual bool IsRoot()
@@ -38,7 +38,7 @@ namespace MarkdownLYT
 		{
 			string[] layers = TagPath.GetLayers(tagText);
 
-			var childPath = $@"{this.directory}\{layers[0]}";
+			var childPath = $@"{this.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}{layers[0]}";
 
 			if (1 == layers.Length)
 			{
@@ -78,7 +78,7 @@ namespace MarkdownLYT
 			this.notes.Add(note);
 		}
 
-		public bool AddAllTags(List<string> allTags)
+		public bool GetAllTags(List<string> allTags)
 		{
 			if (allTags == null)
 			{
@@ -89,7 +89,7 @@ namespace MarkdownLYT
 
 			foreach (var child in chilidren)
 			{
-				child.AddAllTags(allTags);
+				child.GetAllTags(allTags);
 			}
 			return true;
 		}

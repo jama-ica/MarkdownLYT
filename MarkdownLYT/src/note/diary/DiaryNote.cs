@@ -39,7 +39,7 @@ namespace MarkdownLYT.Note
 			var yyyy = dateTime.ToString("yyyy");
 			var mmdd = dateTime.ToString("MM-dd");
 			var week = GetWeekText(dateTime);
-			return $@"{workspacePath}\dialy\{yyyy}\{yyyy}-{mmdd}-{week}.md";
+			return $@"{workspacePath}{Path.DirectorySeparatorChar}dialy{Path.DirectorySeparatorChar}{yyyy}{Path.DirectorySeparatorChar}{yyyy}-{mmdd}-{week}.md";
 		}
 
 		static string GetWeekText(DateTime dateTime)

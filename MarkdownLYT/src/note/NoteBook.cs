@@ -37,13 +37,13 @@ namespace MarkdownLYT.Note
 			return true;
 		}
 
-		public void UpdateBreadcrumbTrail(NoteLayerInfo noteLayer)
+		public void UpdateBreadcrumbTrail(RootNoteLayerInfo rootNoteLayer)
 		{
 			if (0 == this.tags.Count)
 			{
 				throw new Exception("tags count is 0");
 			}
-			BreadcrumbTrail.AddBreadcrumbTrail(this.file, tags, noteLayer);
+			BreadcrumbTrail.AddBreadcrumbTrail(this.file, tags, rootNoteLayer);
 		}
 
 		public string GetFullName()
@@ -63,7 +63,9 @@ namespace MarkdownLYT.Note
 
 		public string GetRelativePath(string currentDir)
 		{
-			return Path.GetRelativePath(currentDir, GetFullName());
+			var path = Path.GetRelativePath(currentDir, GetFullName());
+			var path2 = path.Replace(Path.DirectorySeparatorChar, '/');
+			return path2;
 		}
 
 		void LoadTag(FileInfo file)
@@ -77,7 +79,7 @@ namespace MarkdownLYT.Note
 			foreach (var tag in tags)
 			{
 				this.tags.Add(tag);
-				Log.Debug($"Notebook: add tag: {tag.fullPath}");
+				Log.Debug($"Notebook: add tag: {tag.fullName}");
 			}
 		}
 

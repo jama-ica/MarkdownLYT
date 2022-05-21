@@ -105,7 +105,7 @@ namespace MarkdownLYT
 				}
 
 				relativePath = noteLayer.mocFile.GetRelativePath(file.DirectoryName);
-				sb.Append($"[{layer}]({relativePath})");
+				sb.Append($" / [{layer}]({relativePath})");
 
 				parentLayer = noteLayer;
 			}

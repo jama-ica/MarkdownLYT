@@ -159,7 +159,7 @@ namespace MarkdownLYT
 
 			foreach (var note in noteLayer.notes)
 			{
-				note.UpdateBreadcrumbTrail(noteLayer);
+				note.UpdateBreadcrumbTrail(this.rootNoteLayer);
 			}
 			foreach (var child in noteLayer.chilidren)
 			{
