@@ -78,20 +78,14 @@ namespace MarkdownLYT
 			this.notes.Add(note);
 		}
 
-		public bool GetAllTags(List<string> allTags)
+		public void GetAllTags(List<string> allTags)
 		{
-			if (allTags == null)
-			{
-				throw new Exception("list is null");
-			}
-
 			allTags.Add(tagName);
 
 			foreach (var child in chilidren)
 			{
 				child.GetAllTags(allTags);
 			}
-			return true;
 		}
 
 		public NoteLayerInfo? FindChildNoteLayer(string tagName)

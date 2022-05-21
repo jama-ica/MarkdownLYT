@@ -28,5 +28,17 @@ namespace MarkdownLYT
 				AddLayer(tag.fullName, note);
 			}
 		}
+
+		public List<string> GetAllTags()
+		{
+			var allTags = new List<string>();
+
+			foreach (var child in chilidren)
+			{
+				child.GetAllTags(allTags);
+			}
+
+			return allTags;
+		}
 	}
 }

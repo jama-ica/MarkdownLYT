@@ -7,14 +7,40 @@ using System.IO;
 
 namespace MarkdownLYT.Note
 {
-	public interface INote
+	public abstract class BaseNote
 	{
-		public string GetFullName();
+		protected FileInfo file;
 
-		public string GetFileName();
+		public BaseNote(string path)
+		{
+			this.file = new FileInfo(path);
+		}
 
-		public string GetName();
+		public string GetDirectoryName()
+		{
+			return this.file.DirectoryName;
+		}
 
-		public string GetRelativePath(string currentDir);
+		public string GetFullName()
+		{
+			return this.file.FullName;
+		}
+
+		public string GetFileName()
+		{
+			return this.file.Name;
+		}
+
+		public string GetName()
+		{
+			return this.file.Name[..^3];
+		}
+
+		public string GetRelativePath(string currentDir)
+		{
+			var path = Path.GetRelativePath(currentDir, GetFullName());
+			path = path.Replace(Path.DirectorySeparatorChar, '/');
+			return path;
+		}
 	}
 }

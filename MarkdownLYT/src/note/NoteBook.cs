@@ -8,14 +8,13 @@ using MarkdownLYT.Tag;
 
 namespace MarkdownLYT.Note
 {
-	class NoteBook : INote
+	class NoteBook : BaseNote
 	{
-		FileInfo file;
 		public List<TagInfo> tags { get; }
 
 		public NoteBook(string path)
+			: base(path)
 		{
-			this.file = new FileInfo(path);
 			this.tags = new List<TagInfo>();
 		}
 
@@ -46,27 +45,6 @@ namespace MarkdownLYT.Note
 			BreadcrumbTrail.AddBreadcrumbTrail(this.file, tags, rootNoteLayer);
 		}
 
-		public string GetFullName()
-		{
-			return this.file.FullName;
-		}
-
-		public string GetFileName()
-		{
-			return this.file.Name;
-		}
-
-		public string GetName()
-		{
-			return this.file.Name[..^3];
-		}
-
-		public string GetRelativePath(string currentDir)
-		{
-			var path = Path.GetRelativePath(currentDir, GetFullName());
-			var path2 = path.Replace(Path.DirectorySeparatorChar, '/');
-			return path2;
-		}
 
 		void LoadTag(FileInfo file)
 		{

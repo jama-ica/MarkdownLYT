@@ -5,27 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace MarkdownLYT
+namespace MarkdownLYT.Note
 {
-	internal class TagsFile
+	internal class TagsFile : BaseNote
 	{
-		string path;
 
 		public TagsFile(string path)
+			: base(path)
 		{
-			this.path = path;
 		}
 
 		public void UpdateFile(List<string> tags)
 		{
 			Log.Debug("HomeFile: update file");
 
-			if (!File.Exists(this.path))
+			if (!this.file.Exists)
 			{
-				FileUtil.SafeCreateFile(this.path);
+				FileUtil.SafeCreateFile(GetFullName());
 			}
 
-			using (var sw = new StreamWriter(path, append:false, Encoding.UTF8))
+			using (var sw = new StreamWriter(GetFullName(), append:false, Encoding.UTF8))
 			{
 				foreach (var tag in tags)
 				{

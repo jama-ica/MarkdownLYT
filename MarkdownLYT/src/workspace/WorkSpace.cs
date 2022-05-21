@@ -65,7 +65,7 @@ namespace MarkdownLYT
 			return true;
 		}
 
-		List<string> GetAllTags()
+		public List<string> GetAllTags()
 		{
 			if (this.rootNoteLayer == null)
 			{
@@ -73,8 +73,7 @@ namespace MarkdownLYT
 				return null;
 			}
 
-			var allTags = new List<string>();
-			this.rootNoteLayer.GetAllTags(allTags);
+			var allTags = this.rootNoteLayer.GetAllTags();
 			return allTags;
 		}
 

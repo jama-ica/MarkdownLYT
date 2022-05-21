@@ -175,9 +175,13 @@ namespace MarkdownLYT
 
 			for (int i = 0; i < 31; i++)
 			{
-				DiaryNote.Create(day);
+				if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+				{
+					DiaryNote.Create(day);
+				}
 
 				day = day.AddDays(1);
+
 				if(day.Month != today.Month)
 				{
 					break;
@@ -192,7 +196,10 @@ namespace MarkdownLYT
 
 			for (int i = 0; i < 31; i++)
 			{
-				DiaryNote.Create(day);
+				if (day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+				{
+					DiaryNote.Create(day);
+				}
 
 				day = day.AddDays(1);
 				if (day.Month != today.Month)

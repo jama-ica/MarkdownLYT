@@ -8,18 +8,16 @@ using MarkdownLYT.Tag;
 
 namespace MarkdownLYT.Note
 {
-	internal class MocFile : INote
+	internal class MocFile : BaseNote
 	{
-		protected FileInfo file;
 
 		public MocFile(string path)
+			: base(path)
 		{
-			this.file = new FileInfo(path);
 		}
 
 		public void UpdateFile(NoteLayerInfo noteLayer)
 		{
-
 			if (!File.Exists(this.file.FullName))
 			{
 				FileUtil.SafeCreateFile(this.file.FullName);
@@ -76,31 +74,5 @@ namespace MarkdownLYT.Note
 			return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
 		}
 
-		public string GetDirectoryName()
-		{
-			return this.file.DirectoryName;
-		}
-
-		public string GetFullName()
-		{
-			return this.file.FullName;
-		}
-
-		public string GetFileName()
-		{
-			return this.file.Name;
-		}
-
-		public string GetName()
-		{
-			return this.file.Name[..^3];
-		}
-
-		public string GetRelativePath(string currentDir)
-		{
-			var path = Path.GetRelativePath(currentDir, GetFullName());
-			var path2 = path.Replace(Path.DirectorySeparatorChar, '/');
-			return path;
-		}
 	}
 }
