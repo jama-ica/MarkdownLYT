@@ -91,9 +91,18 @@ namespace MarkdownLYT
 			{
 				throw new Exception("rootNoteLayer == null");
 			}
+			
+			var noTagNotes = List<NoteBook>();
+			foreach(var note in noteBooks)
+			{
+				if(0 == note.tags.Count)
+				{
+					noTagNotes.Add(note);
+				}
+			}
 
 			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.GetFullName());
-			homeFile.UpdateFile(this.rootNoteLayer, );
+			homeFile.UpdateFile(this.rootNoteLayer, noTagNotes);
 
 			foreach (var childLayer in this.rootNoteLayer.chilidren)
 			{
