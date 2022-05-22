@@ -99,5 +99,29 @@ namespace MarkdownLYT
 			}
 			return null;
 		}
+
+		public NoteLayerInfo SearchNoteLayer(List<string> tagLayers)
+		{
+			if (0 >= tagLayers.Count)
+			{
+				throw new Exception($"layers.Count is {tagLayers.Count}");
+			}
+
+			var childLayer = FindChildNoteLayer(tagLayers[0]);
+			if (childLayer == null)
+			{
+				throw new Exception($"Layer not fond. Tag name is {tagLayers[0]}");
+			}
+
+			if (1 == tagLayers.Count)
+			{
+				return childLayer;
+			}
+			else
+			{
+				tagLayers.RemoveAt(0);
+				return childLayer.SearchNoteLayer(tagLayers);
+			}
+		}
 	}
 }

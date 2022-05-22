@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using MarkdownLYT.Note;
+using MarkdownLYT.Tag;
 
 namespace MarkdownLYT
 {
@@ -39,6 +40,32 @@ namespace MarkdownLYT
 			}
 
 			return allTags;
+		}
+
+		public NoteLayerInfo SearchNoteLayer(TagInfo tag)
+		{
+			var layers = tag.layers;
+
+			if (0 >= layers.Count)
+			{
+				throw new Exception($"layers.Count is {layers.Count}");
+			}
+
+			var childLayer = FindChildNoteLayer(layers[0]);
+			if (childLayer == null)
+			{
+				throw new Exception($"Layer not fond. Tag name is {layers[0]}");
+			}
+
+			if (1 == layers.Count)
+			{
+				return childLayer;
+			}
+			else
+			{
+				layers.RemoveAt(0);
+				return childLayer.SearchNoteLayer(layers);
+			}
 		}
 	}
 }

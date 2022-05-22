@@ -13,18 +13,20 @@ namespace MarkdownLYT
 	{
 
 		string path;
+		List<NoteBook> noteBooks;
 		RootNoteLayerInfo? rootNoteLayer;
 
 		public WorkSpace()
 		{
 			this.path = String.Empty;
+			this.noteBooks = new List<NoteBook>();
 			this.rootNoteLayer = null;
 		}
 
 		public bool Load(string path)
 		{
 			this.path = path;
-			var notebooks = new List<NoteBook>();
+			noteBooks.Clear();
 
 			if (!Directory.Exists(path))
 			{
@@ -51,7 +53,7 @@ namespace MarkdownLYT
 				{
 					var notes = new NoteBook(filePath);
 					notes.Load();
-					notebooks.Add(notes);
+					this.noteBooks.Add(notes);
 				}
 				catch (FileNotFoundException)
 				{
@@ -59,7 +61,7 @@ namespace MarkdownLYT
 				}
 			}
 
-			this.rootNoteLayer = CreateRootlTagLayer(notebooks);
+			this.rootNoteLayer = CreateRootlTagLayer(this.noteBooks);
 			return true;
 		}
 
@@ -127,25 +129,10 @@ namespace MarkdownLYT
 			{
 				throw new Exception("rootNoteLayer == null");
 			}
-			foreach (var note in this.rootNoteLayer.notes)
+
+			foreach (var note in this.noteBooks)
 			{
 				note.ReplaceNote(this.rootNoteLayer);
-			}
-			foreach (var child in this.rootNoteLayer.chilidren)
-			{
-				ReplaceNotes(child);
-			}
-		}
-
-		public void ReplaceNotes(NoteLayerInfo noteLayer)
-		{
-			foreach (var note in noteLayer.notes)
-			{
-				note.ReplaceNote(noteLayer);
-			}
-			foreach (var child in noteLayer.chilidren)
-			{
-				ReplaceNotes(child);
 			}
 		}
 
@@ -155,31 +142,9 @@ namespace MarkdownLYT
 			{
 				throw new Exception("rootNoteLayer == null");
 			}
-			foreach (var note in this.rootNoteLayer.notes)
+			foreach (var note in this.noteBooks)
 			{
 				note.UpdateBreadcrumbTrail(this.rootNoteLayer);
-			}
-			foreach (var child in this.rootNoteLayer.chilidren)
-			{
-				UpdateNoteBooks(child);
-			}
-		}
-
-
-		void UpdateNoteBooks(NoteLayerInfo noteLayer)
-		{
-			if (noteLayer == null)
-			{
-				throw new Exception("rootNoteLayer == null");
-			}
-
-			foreach (var note in noteLayer.notes)
-			{
-				note.UpdateBreadcrumbTrail(this.rootNoteLayer);
-			}
-			foreach (var child in noteLayer.chilidren)
-			{
-				UpdateNoteBooks(child);
 			}
 		}
 

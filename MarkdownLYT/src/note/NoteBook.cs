@@ -40,7 +40,8 @@ namespace MarkdownLYT.Note
 		{
 			if (0 == this.tags.Count)
 			{
-				throw new Exception("tags count is 0");
+				// No tag file
+				return;
 			}
 			BreadcrumbTrail.AddBreadcrumbTrail(this.file, tags, rootNoteLayer);
 		}
@@ -61,10 +62,30 @@ namespace MarkdownLYT.Note
 			}
 		}
 
-		public void ReplaceNote(NoteLayerInfo noteLayer)
+		public void ReplaceNote(RootNoteLayerInfo rootNoteLayer)
 		{
-			var newFullname = $@"{noteLayer.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}{GetFileName()}";
-			this.file.MoveTo(newFullname);
+			int num = 0;
+
+			if (this.tags.Count == 0)
+			{
+				// No tag file
+				return;
+			}
+
+			foreach (var tag in this.tags)
+			{
+				var noteLayer = rootNoteLayer.SearchNoteLayer(tag);
+				if (num == 0)
+				{
+					MoveTo(noteLayer.mocFile.GetDirectoryName());
+				}
+				else
+				{
+					CreateSymbolicLink(noteLayer.mocFile.GetDirectoryName());
+				}
+				num++;
+			}
+
 		}
 
 	}

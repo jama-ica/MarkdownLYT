@@ -52,7 +52,6 @@ namespace MarkdownLYT.Tag
 				return null;
 			}
 			
-
 			var tags = new List<TagInfo>();
 
 			try
@@ -99,84 +98,5 @@ namespace MarkdownLYT.Tag
 			return tags;
 		}
 
-
-		static List<TagInfo> ConvertTagFrom3(string text)
-		{
-			var tags = new List<TagInfo>();
-
-			var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
-							.WithNamingConvention(YamlDotNet.Serialization.NamingConventions.CamelCaseNamingConvention.Instance)
-							.Build();
-
-			try
-			{
-				var tagObj = deserializer.Deserialize<TagObj>(text);
-				if (tagObj != null)
-				{
-					foreach (var tagText in tagObj.tag)
-					{
-						var tag = new TagInfo(tagText);
-						if (tags.Contains(tag))
-						{
-							continue;
-						}
-						tags.Add(tag);
-					}
-				}
-			}
-			catch
-			{
-			}
-
-			return tags;
-		}
-
-		static List<TagInfo> ConvertTagFrom2(string text)
-		{
-			var tags = new List<TagInfo>();
-
-			var deserializer = new YamlDotNet.Serialization.Deserializer();
-
-			try
-			{
-				var tagObj = deserializer.Deserialize<TagObj>(text);
-				if (tagObj != null)
-				{
-					foreach (var tagText in tagObj.tag)
-					{
-						var tag = new TagInfo(tagText);
-						if (tags.Contains(tag))
-						{
-							continue;
-						}
-						tags.Add(tag);
-					}
-				}
-			}
-			catch {
-			}
-
-			try
-			{
-				var tagsObj = deserializer.Deserialize<TagsObj>(text);
-				if (tagsObj != null)
-				{
-					foreach (var tagText in tagsObj.tags)
-					{
-						var tag = new TagInfo(tagText);
-						if (tags.Contains(tag))
-						{
-							continue;
-						}
-						tags.Add(tag);
-					}
-				}
-			}
-			catch
-			{
-			}
-
-			return tags;
-		}
 	}
 }
