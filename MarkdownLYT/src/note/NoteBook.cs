@@ -61,5 +61,11 @@ namespace MarkdownLYT.Note
 			}
 		}
 
+		public void ReplaceNote(NoteLayerInfo noteLayer)
+		{
+			var newFullname = $@"{noteLayer.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}{GetFileName()}";
+			this.file.MoveTo(newFullname);
+		}
+
 	}
 }

@@ -13,13 +13,11 @@ namespace MarkdownLYT
 	{
 
 		string path;
-		//List<NoteBook> notebooks;
 		RootNoteLayerInfo? rootNoteLayer;
 
 		public WorkSpace()
 		{
 			this.path = String.Empty;
-			//this.notebooks = new List<NoteBook>();
 			this.rootNoteLayer = null;
 		}
 
@@ -129,7 +127,26 @@ namespace MarkdownLYT
 			{
 				throw new Exception("rootNoteLayer == null");
 			}
-			//TODO
+			foreach (var note in this.rootNoteLayer.notes)
+			{
+				note.ReplaceNote(this.rootNoteLayer);
+			}
+			foreach (var child in this.rootNoteLayer.chilidren)
+			{
+				ReplaceNotes(child);
+			}
+		}
+
+		public void ReplaceNotes(NoteLayerInfo noteLayer)
+		{
+			foreach (var note in noteLayer.notes)
+			{
+				note.ReplaceNote(noteLayer);
+			}
+			foreach (var child in noteLayer.chilidren)
+			{
+				ReplaceNotes(child);
+			}
 		}
 
 		public void UpdateAllNoteBooks()
