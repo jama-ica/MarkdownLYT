@@ -12,9 +12,9 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Log.Info("Markdown LYT");
-			Log.Info("- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
-			Log.Info("");
+			Logger.Info("Markdown LYT");
+			Logger.Info("- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
+			Logger.Info("");
 
 			// Load Setting
 			var setting = SettingFile.GetInstance();
@@ -30,7 +30,7 @@ namespace MarkdownLYT
 			{
 				if (SettingFile.GetData().workspace.path == String.Empty)
 				{
-					Log.Info("Workspace path is not set yet.");
+					Logger.Info("Workspace path is not set yet.");
 					InputWorkspacePath();
 				}
 
@@ -38,7 +38,7 @@ namespace MarkdownLYT
 				var workspaceDir = new DirectoryInfo(workspacePath);
 				if (!workspaceDir.Exists)
 				{
-					Log.Warn($"Workspace path {workspaceDir.FullName} is not found.");
+					Logger.Warn($"Workspace path {workspaceDir.FullName} is not found.");
 					InputWorkspacePath();
 				}
 			}
@@ -52,7 +52,7 @@ namespace MarkdownLYT
 		{
 			while (true)
 			{
-				Log.Info("Please input your workspace dir path.");
+				Logger.Info("Please input your workspace dir path.");
 				string? input = Console.ReadLine();
 				if (input == null)
 				{
@@ -61,7 +61,7 @@ namespace MarkdownLYT
 				var dir = new DirectoryInfo(input);
 				if (!dir.Exists)
 				{
-					Log.Warn("The directory does not exist.");
+					Logger.Warn("The directory does not exist.");
 					continue;
 				}
 
@@ -75,14 +75,14 @@ namespace MarkdownLYT
 		{
 			while (true)
 			{
-				Log.Info("");
-				Log.Info("Please input command");
+				Logger.Info("");
+				Logger.Info("Please input command");
 				foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
 				{
 					E_COMMAND cmd = (E_COMMAND)no;
-					Log.Info($"  {String.Format("{0, -10}", cmd.GetName())} {cmd.GetDescription()}");
+					Logger.Info($"  {String.Format("{0, -10}", cmd.GetName())} {cmd.GetDescription()}");
 				}
-				Log.Info("");
+				Logger.Info("");
 
 				string? text = Console.ReadLine();
 				if (text == null)
@@ -93,7 +93,7 @@ namespace MarkdownLYT
 				var command = ExCommand.ToCommand(text);
 				if (command == null)
 				{
-					Log.Info("Unknown command");
+					Logger.Info("Unknown command");
 					continue;
 				}
 
@@ -131,7 +131,7 @@ namespace MarkdownLYT
 				}
 				else
 				{
-					Log.Warn("Unknown command");
+					Logger.Warn("Unknown command");
 				}
 			}
 		}

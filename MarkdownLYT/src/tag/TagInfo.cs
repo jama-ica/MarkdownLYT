@@ -26,12 +26,12 @@ namespace MarkdownLYT.Tag
 		{
 			if(Define.LEYER_TOP_LEVEL > layerLevel)
 			{
-				Log.Error($"invalid layer level (= {layerLevel}) is passed");
+				Logger.Error($"invalid layer level (= {layerLevel}) is passed");
 				return "";
 			}
 			if (layerLevel >= layers.Count)
 			{
-				Log.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
+				Logger.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
 				return "";
 			}
 
@@ -42,12 +42,12 @@ namespace MarkdownLYT.Tag
 		{
 			if (Define.LEYER_TOP_LEVEL > layerLevel)
 			{
-				Log.Error($"invalid layer level (= {layerLevel}) is passed");
+				Logger.Error($"invalid layer level (= {layerLevel}) is passed");
 				return "";
 			}
 			if (layerLevel >= layers.Count)
 			{
-				Log.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
+				Logger.Error($"layer level ({layerLevel}) over the layers count ({layers.Count})");
 				return "";
 			}
 

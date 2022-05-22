@@ -38,28 +38,32 @@ namespace MarkdownLYT
 
 			if (!Directory.Exists(directoryName))
 			{
-				Log.Error($"Workspace: load notes: {directoryName} is not found");
+				Logger.Error($"Workspace: load notes: {directoryName} is not found");
 				return false;
 			}
 			
-			var filePaths = Directory.EnumerateFiles(directoryName, "*.md", SearchOption.AllDirectories);
-			foreach (string filePath in filePaths)
+			var fullnames = Directory.EnumerateFiles(directoryName, "*.md", SearchOption.AllDirectories);
+			foreach (string fullname in fullnames)
 			{
-				if (DiaryNote.IsDiaryFile(filePath))
+				if (DiaryNote.IsDiaryFile(fullname))
 				{
 					continue;
 				}
-				if (MocFile.IsMocFile(filePath))
+				if (MocFile.IsMocFile(fullname))
 				{
 					continue;
 				}
-				if (HomeFile.IsHome(filePath))
+				if (HomeFile.IsHome(fullname))
+				{
+					continue;
+				}
+				if (TagsFile.IsTagsFile(fullname))
 				{
 					continue;
 				}
 				try
 				{
-					var notes = new NoteBook(filePath);
+					var notes = new NoteBook(fullname);
 					notes.Load();
 					this.noteBooks.Add(notes);
 				}
@@ -77,7 +81,7 @@ namespace MarkdownLYT
 		{
 			if (this.rootNoteLayer == null)
 			{
-				Log.Error("rootNoteLayer == null");
+				Logger.Error("rootNoteLayer == null");
 				return null;
 			}
 
@@ -92,7 +96,7 @@ namespace MarkdownLYT
 				throw new Exception("rootNoteLayer == null");
 			}
 			
-			var noTagNotes = List<NoteBook>();
+			var noTagNotes = new List<NoteBook>();
 			foreach(var note in noteBooks)
 			{
 				if(0 == note.tags.Count)

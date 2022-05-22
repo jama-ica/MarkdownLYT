@@ -6,12 +6,35 @@ using System.Threading.Tasks;
 
 namespace MarkdownLYT
 {
-	internal class Log
+	internal class Logger
 	{
+		enum E_Level
+		{
+			Error,
+			Warn,
+			Info,
+			Debug,
+		};
+
+		static Logger Instance = null;
+
+		private Logger()
+		{
+
+		}
+
+		public static Logger GetInstance()
+		{
+			if (Instance == null)
+			{
+				Instance = new Logger();
+			}
+			return Instance;
+		}
+
 		public static void Error(string message)
 		{
-			Console.ForegroundColor = ConsoleColor.Red;
-			Console.WriteLine("Error: " + message);
+			GetInstance().ConsoleError(message);
 		}
 
 		public static void Warn(String message)
@@ -31,5 +54,12 @@ namespace MarkdownLYT
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine(message);
 		}
+
+		public void ConsoleError(string message)
+		{
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine("Error: " + message);
+		}
+
 	}
 }

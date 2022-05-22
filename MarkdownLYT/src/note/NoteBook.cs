@@ -27,11 +27,11 @@ namespace MarkdownLYT.Note
 		{
 			if (!File.Exists(file.FullName))
 			{
-				Log.Error($"Notebook: file not found: {file.FullName}");
+				Logger.Error($"Notebook: file not found: {file.FullName}");
 				return false;
 			}
 
-			Log.Info($"Notebook: load: {file.FullName}");
+			Logger.Info($"Notebook: load: {file.FullName}");
 			LoadTag(file);
 			return true;
 		}
@@ -53,35 +53,35 @@ namespace MarkdownLYT.Note
 			var tags = TagReader.Read(file);
 			if (tags.Count == 0)
 			{
-				Log.Debug($"Notebook: no tag");
+				Logger.Debug($"Notebook: no tag");
 			}
 			foreach (var tag in tags)
 			{
 				this.tags.Add(tag);
-				Log.Debug($"Notebook: add tag: {tag.fullName}");
+				Logger.Debug($"Notebook: add tag: {tag.fullName}");
 			}
 		}
 
 		public void ReplaceNote(RootNoteLayerInfo rootNoteLayer)
 		{
-			int num = 0;
-
 			if (this.tags.Count == 0)
 			{
-				// No tag file
+				this.file = SafeCopyTo($"{rootNoteLayer.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}NoTags");
 				return;
 			}
+
+			int num = 0;
 
 			foreach (var tag in this.tags)
 			{
 				var noteLayer = rootNoteLayer.SearchNoteLayer(tag);
 				if (num == 0)
 				{
-					this.file = CopyTo(noteLayer.mocFile.GetDirectoryName());
+					this.file = SafeCopyTo(noteLayer.mocFile.GetDirectoryName());
 				}
 				else
 				{
-					CreateSymbolicLink(noteLayer.mocFile.GetDirectoryName());
+					SafeCreateSymbolicLink(noteLayer.mocFile.GetDirectoryName());
 				}
 				num++;
 			}

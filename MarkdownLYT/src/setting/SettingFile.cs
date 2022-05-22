@@ -51,7 +51,7 @@ namespace MarkdownLYT
 		{
 			if (this.dataObj == null)
 			{
-				Log.Error("dataObj is null");
+				Logger.Error("dataObj is null");
 				return;
 			}
 			Save(this.dataObj);

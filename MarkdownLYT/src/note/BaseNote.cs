@@ -43,19 +43,19 @@ namespace MarkdownLYT.Note
 			return path;
 		}
 
-		protected FileInfo CopyTo(string directoryName)
+		protected FileInfo SafeCopyTo(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
 			return FileUtil.SafeCopyTo(this.file, newFullname);
 		}
 
-		protected void MoveTo(string directoryName)
+		protected void SafeMoveTo(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
 			FileUtil.SafeMoveTo(this.file, newFullname);
 		}
 
-		protected void CreateSymbolicLink(string directoryName)
+		protected void SafeCreateSymbolicLink(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
 			FileUtil.SafeCreateSymbolicLink(this.file, newFullname);

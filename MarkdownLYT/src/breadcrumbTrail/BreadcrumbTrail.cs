@@ -100,7 +100,7 @@ namespace MarkdownLYT
 				var noteLayer = parentLayer.FindChildNoteLayer(layer);
 				if (noteLayer == null)
 				{
-					Log.Warn($"BreadcrumbTrail: tag name: {layer} is not found");
+					Logger.Warn($"BreadcrumbTrail: tag name: {layer} is not found");
 					break;
 				}
 
@@ -156,7 +156,7 @@ namespace MarkdownLYT
 					// nothing to do
 					break;
 				default:
-					Log.Error($"unexpect state ({state})");
+					Logger.Error($"unexpect state ({state})");
 					break;
 			}
 		}

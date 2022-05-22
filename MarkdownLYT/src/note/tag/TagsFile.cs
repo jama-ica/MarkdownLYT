@@ -17,7 +17,7 @@ namespace MarkdownLYT.Note
 
 		public void UpdateFile(List<string> tags)
 		{
-			Log.Debug("HomeFile: update file");
+			Logger.Debug("HomeFile: update file");
 
 			if (!this.file.Exists)
 			{
@@ -31,6 +31,12 @@ namespace MarkdownLYT.Note
 					sw.WriteLine(tag);
 				}
 			}
+		}
+
+		public static bool IsTagsFile(string fullname)
+		{
+			var splits = fullname.Split(Path.DirectorySeparatorChar);
+			return (splits[splits.Length - 1] == "tags.md");
 		}
 
 	}

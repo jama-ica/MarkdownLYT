@@ -43,7 +43,7 @@ namespace MarkdownLYT.Tag
 			pos++;
 			if (path.Length <= pos)
 			{
-				Log.Warn($"unexpect path = {path}");
+				Logger.Warn($"unexpect path = {path}");
 				return "";
 			}
 			return path[pos..];

@@ -24,7 +24,7 @@ namespace MarkdownLYT.Note
 			var fullname = GetFileFullName(dateTime);
 			if (!File.Exists(fullname))
 			{
-				Log.Error($"file {fullname} is not found");
+				Logger.Error($"file {fullname} is not found");
 				return;
 			}
 			var proc = new System.Diagnostics.Process();
