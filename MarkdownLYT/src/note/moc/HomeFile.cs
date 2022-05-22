@@ -16,7 +16,7 @@ namespace MarkdownLYT.Note
 		{
 		}
 
-		public void UpdateFile(RootNoteLayerInfo rootTagLayer)
+		public void UpdateFile(RootNoteLayerInfo rootTagLayer, List<NoteBook> noTagNotes)
 		{
 
 			if (!File.Exists(this.file.FullName))
@@ -35,22 +35,6 @@ namespace MarkdownLYT.Note
 				sw.WriteLine("# Home");
 				sw.WriteLine();
 
-				// add note link
-				if (0 < rootTagLayer.notes.Count)
-				{
-					sw.WriteLine("## Notes");
-					sw.WriteLine();
-				}
-				foreach (var note in rootTagLayer.notes)
-				{
-					sw.WriteLine($"[{note.GetName()}]({note.GetFullName()})");
-				}
-				if (0 < rootTagLayer.notes.Count)
-				{
-					sw.WriteLine();
-				}
-
-
 				// add moc link
 				if (0 < rootTagLayer.chilidren.Count)
 				{
@@ -63,6 +47,33 @@ namespace MarkdownLYT.Note
 				if (0 < rootTagLayer.chilidren.Count)
 				{
 					sw.WriteLine();
+				}
+
+				// add note link
+				if (0 < rootTagLayer.notes.Count)
+				{
+					sw.WriteLine("## Notes");
+					sw.WriteLine();
+				}
+				foreach (var note in rootTagLayer.notes)
+				{
+					var relativePath = note.GetRelativePath(file.DirectoryName);
+					sw.WriteLine($"[{note.GetName()}]({relativePath})");
+				}
+				if (0 < rootTagLayer.notes.Count)
+				{
+					sw.WriteLine();
+				}
+
+				// add note no tags
+				if (0 < noTagNotes.Count)
+				{
+					sw.WriteLine("## No Tag Notes");
+				}
+				foreach (var note in noTagNotes)
+				{
+					var relativePath = note.GetRelativePath(file.DirectoryName);
+					sw.WriteLine($"[{note.GetName()}]({relativePath})");
 				}
 			}
 		}

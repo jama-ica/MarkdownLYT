@@ -93,7 +93,7 @@ namespace MarkdownLYT
 			}
 
 			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.GetFullName());
-			homeFile.UpdateFile(this.rootNoteLayer);
+			homeFile.UpdateFile(this.rootNoteLayer, );
 
 			foreach (var childLayer in this.rootNoteLayer.chilidren)
 			{
