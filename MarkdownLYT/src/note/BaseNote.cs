@@ -43,6 +43,12 @@ namespace MarkdownLYT.Note
 			return path;
 		}
 
+		protected FileInfo CopyTo(string directoryName)
+		{
+			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
+			return FileUtil.SafeCopyTo(this.file, newFullname);
+		}
+
 		protected void MoveTo(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";

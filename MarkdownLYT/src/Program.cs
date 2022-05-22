@@ -222,6 +222,8 @@ namespace MarkdownLYT
 		{
 			var noteDirectoryName = workspace.GetNoteDirectoryName();
 			var backupDir = workspace.Backup(noteDirectoryName);
+
+			//TODO 全ファイルを note にコピーする
 		}
 	}
 }

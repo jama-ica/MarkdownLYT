@@ -35,10 +35,6 @@ namespace MarkdownLYT
 		public bool LoadNotebooks(string directoryName)
 		{
 			noteBooks.Clear();
-			if (this.rootNoteLayer != null)
-			{
-				throw new Exception("rootNoteLayer is not null");
-			}
 
 			if (!Directory.Exists(directoryName))
 			{

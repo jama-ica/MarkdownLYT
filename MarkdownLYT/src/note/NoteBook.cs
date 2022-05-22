@@ -77,7 +77,7 @@ namespace MarkdownLYT.Note
 				var noteLayer = rootNoteLayer.SearchNoteLayer(tag);
 				if (num == 0)
 				{
-					MoveTo(noteLayer.mocFile.GetDirectoryName());
+					this.file = CopyTo(noteLayer.mocFile.GetDirectoryName());
 				}
 				else
 				{
