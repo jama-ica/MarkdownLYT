@@ -28,14 +28,13 @@ namespace MarkdownLYT
 
 			// Load workspace
 			{
-				var workspacePath = SettingFile.GetData().workspace.path;
-				if (workspacePath == String.Empty)
+				if (SettingFile.GetData().workspace.path == String.Empty)
 				{
 					Log.Info("Workspace path is not set yet.");
 					InputWorkspacePath();
 				}
 
-				workspacePath = SettingFile.GetData().workspace.path;
+				var workspacePath = SettingFile.GetData().workspace.path;
 				var workspaceDir = new DirectoryInfo(workspacePath);
 				if (!workspaceDir.Exists)
 				{
@@ -44,7 +43,7 @@ namespace MarkdownLYT
 				}
 			}
 
-			var workspace = new WorkSpace();
+			var workspace = new WorkSpace(SettingFile.GetData().workspace.path);
 			InputCommand(workspace);
 			Environment.Exit(0);
 		}
@@ -126,6 +125,10 @@ namespace MarkdownLYT
 				{
 					RunCommandNextMonth();
 				}
+				else if (command == E_COMMAND.BACKUP)
+				{
+					RunCommandBackup(workspace);
+				}
 				else
 				{
 					Log.Warn("Unknown command");
@@ -135,15 +138,20 @@ namespace MarkdownLYT
 
 		static void RunCommandUpdate(WorkSpace workspace)
 		{
-			// Load workspace
-			var workspacePath = SettingFile.GetData().workspace.path;
-			workspace.Load(workspacePath);
 
-			// Update tag file
-			workspace.UpdateTagFile();
+			// Backup notes
+			var noteDirectoryName = workspace.GetNoteDirectoryName();
+			var backupDir = workspace.Backup(noteDirectoryName);
+			Directory.CreateDirectory(noteDirectoryName);
+
+			// Load NoteBooks
+			workspace.LoadNotebooks(backupDir.FullName);
 
 			// replace file and directory
 			workspace.ReplaceAllNotes();
+
+			// Update tag file
+			workspace.UpdateTagFile();
 
 			// Update home and MOC
 			workspace.UpdateAllMocFiles();
@@ -168,6 +176,7 @@ namespace MarkdownLYT
 			DiaryNote.Create(DateTime.Today);
 			//DiaryNote.Open(DateTime.Today);
 		}
+
 		static void RunCommandMonth()
 		{
 			var today = DateTime.Today;
@@ -207,6 +216,12 @@ namespace MarkdownLYT
 					break;
 				}
 			}
+		}
+
+		static void RunCommandBackup(WorkSpace workspace)
+		{
+			var noteDirectoryName = workspace.GetNoteDirectoryName();
+			var backupDir = workspace.Backup(noteDirectoryName);
 		}
 	}
 }

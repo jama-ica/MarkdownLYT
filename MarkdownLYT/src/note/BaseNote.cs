@@ -46,13 +46,13 @@ namespace MarkdownLYT.Note
 		protected void MoveTo(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
-			this.file.MoveTo(newFullname);
+			FileUtil.SafeMoveTo(this.file, newFullname);
 		}
 
 		protected void CreateSymbolicLink(string directoryName)
 		{
 			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
-			File.CreateSymbolicLink(newFullname, this.GetFullName());
+			FileUtil.SafeCreateSymbolicLink(this.file, newFullname);
 		}
 	}
 }

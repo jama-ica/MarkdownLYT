@@ -16,25 +16,37 @@ namespace MarkdownLYT
 		List<NoteBook> noteBooks;
 		RootNoteLayerInfo? rootNoteLayer;
 
-		public WorkSpace()
+		public WorkSpace(string path)
 		{
-			this.path = String.Empty;
+			this.path = path;
 			this.noteBooks = new List<NoteBook>();
 			this.rootNoteLayer = null;
 		}
 
-		public bool Load(string path)
+		public DirectoryInfo Backup(string directoryName)
 		{
-			this.path = path;
-			noteBooks.Clear();
+			var dir = new DirectoryInfo(directoryName);
+			var today = DateTime.Now;
+			var newDirectoryName = @$"{this.path}{Path.DirectorySeparatorChar}note_{today.ToString("yyyyMMdd_HHmmss")}";
+			dir.MoveTo(newDirectoryName);
+			return dir;
+		}
 
-			if (!Directory.Exists(path))
+		public bool LoadNotebooks(string directoryName)
+		{
+			noteBooks.Clear();
+			if (this.rootNoteLayer != null)
 			{
-				Log.Error($"Workspace: load: {path} is not found");
+				throw new Exception("rootNoteLayer is not null");
+			}
+
+			if (!Directory.Exists(directoryName))
+			{
+				Log.Error($"Workspace: load notes: {directoryName} is not found");
 				return false;
 			}
 			
-			var filePaths = Directory.EnumerateFiles(path, "*.md", SearchOption.AllDirectories);
+			var filePaths = Directory.EnumerateFiles(directoryName, "*.md", SearchOption.AllDirectories);
 			foreach (string filePath in filePaths)
 			{
 				if (DiaryNote.IsDiaryFile(filePath))
@@ -107,13 +119,13 @@ namespace MarkdownLYT
 		public void UpdateTagFile()
 		{
 			var tags = GetAllTags();
-			var tagsFile = new TagsFile($@"{GetNoteDirPath()}{Path.DirectorySeparatorChar}tags.md");
+			var tagsFile = new TagsFile($@"{GetNoteDirectoryName()}{Path.DirectorySeparatorChar}tags.md");
 			tagsFile.UpdateFile(tags);
 		}
 
 		public RootNoteLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
 		{
-			var rootTagLater = new RootNoteLayerInfo(GetNoteDirPath());
+			var rootTagLater = new RootNoteLayerInfo(GetNoteDirectoryName());
 
 			foreach (var note in notes)
 			{
@@ -148,7 +160,7 @@ namespace MarkdownLYT
 			}
 		}
 
-		string GetNoteDirPath()
+		public string GetNoteDirectoryName()
 		{
 			return $@"{this.path}{Path.DirectorySeparatorChar}note";
 		}
