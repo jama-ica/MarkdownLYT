@@ -26,7 +26,7 @@ namespace MarkdownLYT.Tag
 			using (var sr = new StreamReader(file.FullName, Encoding.UTF8))
 			{
 				var deserializer = new YamlDotNet.Serialization.Deserializer();
-				for (int i = 0; sr.Peek() != -1 || i < 10; i++)
+				for (int i = 0; sr.Peek() != -1 && i < 10; i++)
 				{
 					var line = sr.ReadLine();
 					var tgs = DeserializeTag(deserializer, line);

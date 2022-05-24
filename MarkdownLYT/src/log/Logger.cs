@@ -51,8 +51,10 @@ namespace MarkdownLYT
 
 		public static void Debug(String message)
 		{
+		#if DEBUG
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine(message);
+		#endif
 		}
 
 		public void ConsoleError(string message)

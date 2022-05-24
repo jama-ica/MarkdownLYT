@@ -34,45 +34,47 @@ namespace MarkdownLYT.Note
 				sw.WriteLine($"# {noteLayer.tagName}");
 				sw.WriteLine();
 
-				// add note link
-				if (0 < noteLayer.notes.Count)
+				// add moc link
+				if (0 < noteLayer.chilidren.Count)
 				{
-					sw.WriteLine("notes");
-					sw.WriteLine();
+					sw.WriteLine("## MOC");
 				}
-				foreach (var note in noteLayer.notes)
+				var sortedChildren = noteLayer.chilidren.OrderBy(x => x.tagName);
+				foreach (var childLayer in sortedChildren)
 				{
-					var relativePath = note.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($@"[{note.GetName()}]({relativePath})");
+					var relativePath = childLayer.mocFile.GetRelativePath(file.DirectoryName);
+					relativePath = Uri.EscapeDataString(relativePath);
+					sw.WriteLine($@"[{childLayer.tagName}]({relativePath})");
 				}
-				if (0 < noteLayer.notes.Count)
+				if (0 < noteLayer.chilidren.Count)
 				{
 					sw.WriteLine();
 				}
 
-				// add moc link
-				if (0 < noteLayer.chilidren.Count)
+				// add note link
+				if (0 < noteLayer.notes.Count)
 				{
-					sw.WriteLine("moc");
-					sw.WriteLine();
+					sw.WriteLine("## Notes");
 				}
-				foreach (var child in noteLayer.chilidren)
+				var sortedNote = noteLayer.notes.OrderBy(x => x.GetName());
+				foreach (var note in sortedNote)
 				{
-					var relativePath = child.mocFile.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($@"[{child.tagName}]({relativePath})");
+					var relativePath = note.GetRelativePath(file.DirectoryName);
+					relativePath = Uri.EscapeDataString(relativePath);
+					sw.WriteLine($@"[{note.GetFileName()}]({relativePath})");
 				}
-				if (0 < noteLayer.chilidren.Count)
+				if (0 < noteLayer.notes.Count)
 				{
 					sw.WriteLine();
 				}
 			}
 		}
 
-		public static bool IsMocFile(string filePath)
-		{
-			var splits = filePath.Split(Path.DirectorySeparatorChar);
-			return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
-		}
+		//public static bool IsMocFile(string filePath)
+		//{
+		//	var splits = filePath.Split(Path.DirectorySeparatorChar);
+		//	return (splits[splits.Length - 2] == splits[splits.Length - 1][..^3]);
+		//}
 
 	}
 }

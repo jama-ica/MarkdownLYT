@@ -37,9 +37,10 @@ namespace MarkdownLYT.Note
 		{
 			var workspacePath = SettingFile.GetData().workspace.path;
 			var yyyy = dateTime.ToString("yyyy");
-			var mmdd = dateTime.ToString("MM-dd");
+			var MM = dateTime.ToString("MM");
+			var dd = dateTime.ToString("dd");
 			var week = GetWeekText(dateTime);
-			return $@"{workspacePath}{Path.DirectorySeparatorChar}dialy{Path.DirectorySeparatorChar}{yyyy}{Path.DirectorySeparatorChar}{yyyy}-{mmdd}-{week}.md";
+			return $@"{workspacePath}{Path.DirectorySeparatorChar}dialy{Path.DirectorySeparatorChar}{yyyy}{Path.DirectorySeparatorChar}{yyyy}-{MM}{Path.DirectorySeparatorChar}{yyyy}-{MM}-{dd}-{week}.md";
 		}
 
 		static string GetWeekText(DateTime dateTime)

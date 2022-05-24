@@ -26,11 +26,6 @@ namespace MarkdownLYT.Note
 
 			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
 			{
-				//// add breadcrumb trail
-				//var breadcrumb = BreadcrumbTrail.CreateBreadcrumbTrail(rootTagLayer);
-				//sw.WriteLine(breadcrumb);
-				//sw.WriteLine();
-				
 				// add title
 				sw.WriteLine("# Home");
 				sw.WriteLine();
@@ -38,11 +33,14 @@ namespace MarkdownLYT.Note
 				// add moc link
 				if (0 < rootTagLayer.chilidren.Count)
 				{
-					sw.WriteLine("moc");
+					sw.WriteLine("## MOC");
 				}
-				foreach (var childLayer in rootTagLayer.chilidren)
+				var sortedChildren = rootTagLayer.chilidren.OrderBy(x => x.tagName);
+				foreach (var childLayer in sortedChildren)
 				{
-					sw.WriteLine($"[{childLayer.tagName}](./{childLayer.tagName}/{childLayer.tagName}.md)");
+					var relativePath = childLayer.mocFile.GetRelativePath(file.DirectoryName);
+					relativePath = Uri.EscapeDataString(relativePath);
+					sw.WriteLine($@"[{childLayer.tagName}]({relativePath})");
 				}
 				if (0 < rootTagLayer.chilidren.Count)
 				{
@@ -55,10 +53,12 @@ namespace MarkdownLYT.Note
 					sw.WriteLine("## Notes");
 					sw.WriteLine();
 				}
-				foreach (var note in rootTagLayer.notes)
+				var sortedNote = rootTagLayer.notes.OrderBy(x => x.GetName());
+				foreach (var note in sortedNote)
 				{
 					var relativePath = note.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($"[{note.GetName()}]({relativePath})");
+					relativePath = Uri.EscapeDataString(relativePath);
+					sw.WriteLine($"[{note.GetFileName()}]({relativePath})");
 				}
 				if (0 < rootTagLayer.notes.Count)
 				{
@@ -68,12 +68,13 @@ namespace MarkdownLYT.Note
 				// add note no tags
 				if (0 < noTagNotes.Count)
 				{
-					sw.WriteLine("## No Tag Notes");
+					sw.WriteLine("## No Tag");
 				}
 				foreach (var note in noTagNotes)
 				{
 					var relativePath = note.GetRelativePath(file.DirectoryName);
-					sw.WriteLine($"[{note.GetName()}]({relativePath})");
+					relativePath = Uri.EscapeDataString(relativePath);
+					sw.WriteLine($"[{note.GetFileName()}]({relativePath})");
 				}
 			}
 		}

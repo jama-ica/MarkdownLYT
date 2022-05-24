@@ -66,7 +66,7 @@ namespace MarkdownLYT.Note
 		{
 			if (this.tags.Count == 0)
 			{
-				this.file = SafeCopyTo($"{rootNoteLayer.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}NoTags");
+				SafeMoveTo($"{rootNoteLayer.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}NoTags");
 				return;
 			}
 
@@ -77,7 +77,7 @@ namespace MarkdownLYT.Note
 				var noteLayer = rootNoteLayer.SearchNoteLayer(tag);
 				if (num == 0)
 				{
-					this.file = SafeCopyTo(noteLayer.mocFile.GetDirectoryName());
+					SafeMoveTo(noteLayer.mocFile.GetDirectoryName());
 				}
 				else
 				{

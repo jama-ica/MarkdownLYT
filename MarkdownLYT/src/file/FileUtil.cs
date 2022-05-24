@@ -9,9 +9,9 @@ namespace MarkdownLYT
 {
 	internal class FileUtil
 	{
-		public static void SafeCreateFile(string path)
+		public static void SafeCreateFile(string fullname)
 		{
-			var file = new FileInfo(path);
+			var file = new FileInfo(fullname);
 			if (file.Exists)
 			{
 				return;
@@ -33,10 +33,17 @@ namespace MarkdownLYT
 
 		public static void SafeMoveTo(FileInfo oldFile, string newFullname)
 		{
+			if(oldFile.FullName == newFullname)
+			{
+				return;
+			}
+
 			var file = new FileInfo(newFullname);
 			if (file.Exists)
 			{
-				throw new Exception("file already exist");
+				file.Delete();
+				//TODO
+				//throw new Exception("file already exist");
 			}
 
 			var dir = file.Directory;
@@ -77,6 +84,7 @@ namespace MarkdownLYT
 
 		public static void SafeCreateSymbolicLink(FileInfo originalFile, string linkFileFullname)
 		{
+		#if NET6_0
 			if (!originalFile.Exists)
 			{
 				throw new Exception("originalFile does not exist");
@@ -98,9 +106,8 @@ namespace MarkdownLYT
 			{
 				dir.Create();
 			}
-
 			File.CreateSymbolicLink(linkFileFullname, originalFile.FullName);
+		#endif
 		}
-
 	}
 }

@@ -63,8 +63,9 @@ namespace MarkdownLYT
 			}
 			else
 			{
-				layers.RemoveAt(0);
-				return childLayer.SearchNoteLayer(layers);
+				List<string> tempLayers = new List<string>(layers);
+				tempLayers.RemoveAt(0);
+				return childLayer.SearchNoteLayer(tempLayers);
 			}
 		}
 	}

@@ -23,18 +23,54 @@ namespace MarkdownLYT
 			this.rootNoteLayer = null;
 		}
 
-		public DirectoryInfo Backup(string directoryName)
+		public void Backup(string sourceDirName)
 		{
-			var dir = new DirectoryInfo(directoryName);
 			var today = DateTime.Now;
 			var newDirectoryName = @$"{this.path}{Path.DirectorySeparatorChar}note_{today.ToString("yyyyMMdd_HHmmss")}";
-			dir.MoveTo(newDirectoryName);
-			return dir;
+			DirectoryUtil.SafeCopyTo(sourceDirName, newDirectoryName);
 		}
 
-		public bool LoadNotebooks(string directoryName)
+		//public void CleanUp()
+		//{
+		//	var noteDirectoryName = GetNoteDirectoryName();
+		//	var fullnames = Directory.EnumerateFiles(noteDirectoryName, "*.md", SearchOption.AllDirectories);
+		//	foreach (string fullname in fullnames)
+		//	{
+		//		if (DiaryNote.IsDiaryFile(fullname))
+		//		{
+		//			continue;
+		//		}
+		//		if (MocFile.IsMocFile(fullname))
+		//		{
+		//			File.Delete(fullname);
+		//		}
+		//		if (HomeFile.IsHome(fullname))
+		//		{
+		//			File.Delete(fullname);
+		//		}
+		//		if (TagsFile.IsTagsFile(fullname))
+		//		{
+		//			File.Delete(fullname);
+		//		}
+		//	}
+		//}
+
+		public void CleanUpMoc()
+		{
+			var mocDirectoryName = GetMocDirectoryName();
+			var fullnames = Directory.EnumerateFiles(mocDirectoryName, "*.md", SearchOption.AllDirectories);
+			foreach (string fullname in fullnames)
+			{
+				File.Delete(fullname);
+			}
+		}
+
+
+		public bool LoadNotebooks()
 		{
 			noteBooks.Clear();
+
+			var directoryName = GetNoteDirectoryName();
 
 			if (!Directory.Exists(directoryName))
 			{
@@ -45,22 +81,22 @@ namespace MarkdownLYT
 			var fullnames = Directory.EnumerateFiles(directoryName, "*.md", SearchOption.AllDirectories);
 			foreach (string fullname in fullnames)
 			{
-				if (DiaryNote.IsDiaryFile(fullname))
-				{
-					continue;
-				}
-				if (MocFile.IsMocFile(fullname))
-				{
-					continue;
-				}
-				if (HomeFile.IsHome(fullname))
-				{
-					continue;
-				}
-				if (TagsFile.IsTagsFile(fullname))
-				{
-					continue;
-				}
+				//if (DiaryNote.IsDiaryFile(fullname))
+				//{
+				//	continue;
+				//}
+				//if (MocFile.IsMocFile(fullname))
+				//{
+				//	continue;
+				//}
+				//if (HomeFile.IsHome(fullname))
+				//{
+				//	continue;
+				//}
+				//if (TagsFile.IsTagsFile(fullname))
+				//{
+				//	continue;
+				//}
 				try
 				{
 					var notes = new NoteBook(fullname);
@@ -128,13 +164,13 @@ namespace MarkdownLYT
 		public void UpdateTagFile()
 		{
 			var tags = GetAllTags();
-			var tagsFile = new TagsFile($@"{GetNoteDirectoryName()}{Path.DirectorySeparatorChar}tags.md");
+			var tagsFile = new TagsFile($@"{GetMocDirectoryName()}{Path.DirectorySeparatorChar}tags.md");
 			tagsFile.UpdateFile(tags);
 		}
 
 		public RootNoteLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
 		{
-			var rootTagLater = new RootNoteLayerInfo(GetNoteDirectoryName());
+			var rootTagLater = new RootNoteLayerInfo(GetMocDirectoryName());
 
 			foreach (var note in notes)
 			{
@@ -172,6 +208,11 @@ namespace MarkdownLYT
 		public string GetNoteDirectoryName()
 		{
 			return $@"{this.path}{Path.DirectorySeparatorChar}note";
+		}
+
+		public string GetMocDirectoryName()
+		{
+			return $@"{this.path}{Path.DirectorySeparatorChar}moc";
 		}
 	}
 }

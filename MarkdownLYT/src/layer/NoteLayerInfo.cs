@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarkdownLYT.Note;
 using MarkdownLYT.Tag;
+using System.IO;
 
 namespace MarkdownLYT
 {
@@ -38,7 +39,7 @@ namespace MarkdownLYT
 		{
 			string[] layers = TagPath.GetLayers(tagText);
 
-			var childPath = $@"{this.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}{layers[0]}";
+			//var childPath = $@"{this.mocFile.GetDirectoryName()}{Path.DirectorySeparatorChar}{layers[0]}";
 
 			if (1 == layers.Length)
 			{
@@ -46,7 +47,7 @@ namespace MarkdownLYT
 				var child = FindChildNoteLayer(name);
 				if (child == null)
 				{
-					child = new NoteLayerInfo(childPath, name, this);
+					child = new NoteLayerInfo(this.mocFile.GetDirectoryName(), name, this);
 					AddChild(child);
 				}
 				child.AddNote(note);
@@ -60,7 +61,7 @@ namespace MarkdownLYT
 				var child = FindChildNoteLayer(name);
 				if (child == null)
 				{
-					child = new NoteLayerInfo(childPath, name, this);
+					child = new NoteLayerInfo(this.mocFile.GetDirectoryName(), name, this);
 					AddChild(child);
 				}
 				child.AddLayer(TagPath.RemoveTopLayer(tagText), note);

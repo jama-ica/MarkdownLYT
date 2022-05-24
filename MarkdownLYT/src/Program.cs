@@ -12,6 +12,9 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
+			Console.BackgroundColor = ConsoleColor.DarkCyan;
+			Console.Clear();
+
 			Logger.Info("Markdown LYT");
 			Logger.Info("- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
 			Logger.Info("");
@@ -43,9 +46,20 @@ namespace MarkdownLYT
 				}
 			}
 
-			var workspace = new WorkSpace(SettingFile.GetData().workspace.path);
-			InputCommand(workspace);
+			{
+				var workspacePath = SettingFile.GetData().workspace.path;
+				Logger.Info($@"Open workspace: {workspacePath}");
+				var workspace = new WorkSpace(workspacePath);
+				InitWorkspace(workspace);
+				InputCommand(workspace);
+			}
 			Environment.Exit(0);
+		}
+
+		static void InitWorkspace(WorkSpace workspace)
+		{
+			DirectoryUtil.SafeCreate(workspace.GetMocDirectoryName());
+			DirectoryUtil.SafeCreate(workspace.GetNoteDirectoryName());
 		}
 
 		static void InputWorkspacePath()
@@ -140,15 +154,16 @@ namespace MarkdownLYT
 		{
 
 			// Backup notes
-			var noteDirectoryName = workspace.GetNoteDirectoryName();
-			var backupDir = workspace.Backup(noteDirectoryName);
-			Directory.CreateDirectory(noteDirectoryName);
+			//workspace.Backup(noteDirectoryName);
+
+			// Clean notes
+			workspace.CleanUpMoc();
 
 			// Load NoteBooks
-			workspace.LoadNotebooks(backupDir.FullName);
+			workspace.LoadNotebooks();
 
 			// replace file and directory
-			workspace.ReplaceAllNotes();
+			//workspace.ReplaceAllNotes();
 
 			// Update tag file
 			workspace.UpdateTagFile();
@@ -221,7 +236,7 @@ namespace MarkdownLYT
 		static void RunCommandBackup(WorkSpace workspace)
 		{
 			var noteDirectoryName = workspace.GetNoteDirectoryName();
-			var backupDir = workspace.Backup(noteDirectoryName);
+			workspace.Backup(noteDirectoryName);
 
 			//TODO 全ファイルを note にコピーする
 		}
