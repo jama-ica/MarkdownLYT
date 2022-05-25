@@ -3,33 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace MarkdownLYT
 {
-	internal class SettingFile
+	internal class WorkspaceSettingFile
 	{
-		public static readonly string fileName = "setting.dat";
+		public static readonly string fileName = "workspace_setting.dat";
 
-		static SettingFile? Instance = null;
+		static WorkspaceSettingFile? Instance = null;
 
-		SettingDataObj? dataObj;
+		WorkspaceSettingObj? dataObj;
 
-		private SettingFile()
+		private WorkspaceSettingFile()
 		{
 			this.dataObj = null;
 		}
 
-		public static SettingFile GetInstance()
+		public static WorkspaceSettingFile GetInstance()
 		{
 			if (Instance == null)
 			{
-				Instance = new SettingFile();
+				Instance = new WorkspaceSettingFile();
 			}
 			return Instance;
 		}
 
-		public static SettingDataObj? GetData()
+		public static WorkspaceSettingObj? GetData()
 		{
 			return GetInstance().dataObj;
 		}
@@ -43,7 +42,7 @@ namespace MarkdownLYT
 
 			var text = File.ReadAllText(fileName);
 			var deserializer = new YamlDotNet.Serialization.Deserializer();
-			this.dataObj = deserializer.Deserialize<SettingDataObj>(text);
+			this.dataObj = deserializer.Deserialize<WorkspaceSettingObj>(text);
 			return true;
 		}
 
@@ -57,7 +56,7 @@ namespace MarkdownLYT
 			Save(this.dataObj);
 		}
 
-		public void Save(SettingDataObj data)
+		public void Save(WorkspaceSettingObj data)
 		{
 			this.dataObj = data;
 			using TextWriter writer = File.CreateText(fileName);
@@ -65,17 +64,12 @@ namespace MarkdownLYT
 			serializer.Serialize(writer, data);
 		}
 
-		public SettingDataObj CreateDefaultData()
+		public WorkspaceSettingObj CreateDefaultData()
 		{
-			var data = new SettingDataObj
+			var data = new WorkspaceSettingObj
 			{
-				workspace = new SettingDataObj.WorkspaceData
-				{
-					path = String.Empty,
-				}
 			};
 			return data;
 		}
-
 	}
 }

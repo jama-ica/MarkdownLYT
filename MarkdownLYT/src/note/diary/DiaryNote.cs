@@ -35,7 +35,7 @@ namespace MarkdownLYT.Note
 
 		static string GetFileFullName(DateTime dateTime)
 		{
-			var workspacePath = SettingFile.GetData().workspace.path;
+			var workspacePath = AppSettingFile.GetData().workspace.path;
 			var yyyy = dateTime.ToString("yyyy");
 			var MM = dateTime.ToString("MM");
 			var dd = dateTime.ToString("dd");

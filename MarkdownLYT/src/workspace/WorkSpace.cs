@@ -11,7 +11,6 @@ namespace MarkdownLYT
 {
 	internal class WorkSpace
 	{
-
 		string path;
 		List<NoteBook> noteBooks;
 		RootNoteLayerInfo? rootNoteLayer;
@@ -30,30 +29,6 @@ namespace MarkdownLYT
 			DirectoryUtil.SafeCopyTo(sourceDirName, newDirectoryName);
 		}
 
-		//public void CleanUp()
-		//{
-		//	var noteDirectoryName = GetNoteDirectoryName();
-		//	var fullnames = Directory.EnumerateFiles(noteDirectoryName, "*.md", SearchOption.AllDirectories);
-		//	foreach (string fullname in fullnames)
-		//	{
-		//		if (DiaryNote.IsDiaryFile(fullname))
-		//		{
-		//			continue;
-		//		}
-		//		if (MocFile.IsMocFile(fullname))
-		//		{
-		//			File.Delete(fullname);
-		//		}
-		//		if (HomeFile.IsHome(fullname))
-		//		{
-		//			File.Delete(fullname);
-		//		}
-		//		if (TagsFile.IsTagsFile(fullname))
-		//		{
-		//			File.Delete(fullname);
-		//		}
-		//	}
-		//}
 
 		public void CleanUpMoc()
 		{
@@ -115,13 +90,18 @@ namespace MarkdownLYT
 
 		public List<string> GetAllTags()
 		{
-			if (this.rootNoteLayer == null)
+			var allTags = new List<string>();
+			foreach(var note in this.noteBooks)
 			{
-				Logger.Error("rootNoteLayer == null");
-				return null;
+				foreach(var tag in note.tags)
+				{
+					if (allTags.Contains(tag.fullName))
+					{
+						continue;
+					}
+					allTags.Add(tag.fullName);
+				}
 			}
-
-			var allTags = this.rootNoteLayer.GetAllTags();
 			return allTags;
 		}
 

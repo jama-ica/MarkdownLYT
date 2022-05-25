@@ -20,7 +20,7 @@ namespace MarkdownLYT
 			Logger.Info("");
 
 			// Load Setting
-			var setting = SettingFile.GetInstance();
+			var setting = AppSettingFile.GetInstance();
 			{
 				if(false == setting.Load())
 				{
@@ -31,13 +31,13 @@ namespace MarkdownLYT
 
 			// Load workspace
 			{
-				if (SettingFile.GetData().workspace.path == String.Empty)
+				if (AppSettingFile.GetData().workspace.path == String.Empty)
 				{
 					Logger.Info("Workspace path is not set yet.");
 					InputWorkspacePath();
 				}
 
-				var workspacePath = SettingFile.GetData().workspace.path;
+				var workspacePath = AppSettingFile.GetData().workspace.path;
 				var workspaceDir = new DirectoryInfo(workspacePath);
 				if (!workspaceDir.Exists)
 				{
@@ -47,7 +47,7 @@ namespace MarkdownLYT
 			}
 
 			{
-				var workspacePath = SettingFile.GetData().workspace.path;
+				var workspacePath = AppSettingFile.GetData().workspace.path;
 				Logger.Info($@"Open workspace: {workspacePath}");
 				var workspace = new WorkSpace(workspacePath);
 				InitWorkspace(workspace);
@@ -79,8 +79,8 @@ namespace MarkdownLYT
 					continue;
 				}
 
-				SettingFile.GetData().workspace.path = dir.FullName;
-				SettingFile.GetInstance().Save();
+				AppSettingFile.GetData().workspace.path = dir.FullName;
+				AppSettingFile.GetInstance().Save();
 				break;
 			}
 		}
