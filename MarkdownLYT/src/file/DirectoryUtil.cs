@@ -34,12 +34,14 @@ namespace MarkdownLYT
 
 			foreach (var file in sourceDir.GetFiles())
 			{
-				file.CopyTo(newDir.FullName + @"\" + file.Name, overwrite:true);
+				var newFileFullname = Path.Combine(newDir.FullName, file.Name);
+				file.CopyTo(newFileFullname, overwrite:true);
 			}
 
 			foreach (var dir in sourceDir.GetDirectories())
 			{
-				SafeCopyTo(dir.FullName, newDir.FullName + @"\" + dir.Name);
+				var newDirFullname = Path.Combine(newDir.FullName, dir.Name);
+				SafeCopyTo(dir.FullName, newDirFullname);
 			}
 
 		}

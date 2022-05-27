@@ -33,7 +33,7 @@ namespace MarkdownLYT.Note
 
 		public string GetName()
 		{
-			return this.file.Name[..^3];
+			return Path.GetFileNameWithoutExtension(this.file.Name);
 		}
 
 		public string GetRelativePath(string currentDir)
@@ -45,19 +45,19 @@ namespace MarkdownLYT.Note
 
 		protected FileInfo SafeCopyTo(string directoryName)
 		{
-			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
+			var newFullname = Path.Combine(directoryName, GetFileName());
 			return FileUtil.SafeCopyTo(this.file, newFullname);
 		}
 
 		protected void SafeMoveTo(string directoryName)
 		{
-			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
+			var newFullname = Path.Combine(directoryName, GetFileName());
 			FileUtil.SafeMoveTo(this.file, newFullname);
 		}
 
 		protected void SafeCreateSymbolicLink(string directoryName)
 		{
-			var newFullname = $@"{directoryName}{Path.DirectorySeparatorChar}{GetFileName()}";
+			var newFullname = Path.Combine(directoryName, GetFileName());
 			FileUtil.SafeCreateSymbolicLink(this.file, newFullname);
 		}
 	}

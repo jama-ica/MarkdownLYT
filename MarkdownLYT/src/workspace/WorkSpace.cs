@@ -11,21 +11,33 @@ namespace MarkdownLYT
 {
 	internal class WorkSpace
 	{
-		string path;
+		string dirFullName;
+
+		WorkspaceSettingFile? workspaceSetting;
 		List<NoteBook> noteBooks;
 		RootNoteLayerInfo? rootNoteLayer;
 
-		public WorkSpace(string path)
+		public WorkSpace(string dirFullName)
 		{
-			this.path = path;
+			this.dirFullName = dirFullName;
+			this.workspaceSetting = null;
 			this.noteBooks = new List<NoteBook>();
 			this.rootNoteLayer = null;
+		}
+
+		public void Start()
+		{
+			this.workspaceSetting = new WorkspaceSettingFile();
+			this.workspaceSetting.Load(this.dirFullName);
+
+			DirectoryUtil.SafeCreate(GetMocDirectoryName());
+			DirectoryUtil.SafeCreate(GetNoteDirectoryName());
 		}
 
 		public void Backup(string sourceDirName)
 		{
 			var today = DateTime.Now;
-			var newDirectoryName = @$"{this.path}{Path.DirectorySeparatorChar}note_{today.ToString("yyyyMMdd_HHmmss")}";
+			var newDirectoryName = @$"{this.dirFullName}{Path.DirectorySeparatorChar}note_{today.ToString("yyyyMMdd_HHmmss")}";
 			DirectoryUtil.SafeCopyTo(sourceDirName, newDirectoryName);
 		}
 
@@ -187,12 +199,55 @@ namespace MarkdownLYT
 
 		public string GetNoteDirectoryName()
 		{
-			return $@"{this.path}{Path.DirectorySeparatorChar}note";
+			return Path.Combine(this.dirFullName, "note");
 		}
 
 		public string GetMocDirectoryName()
 		{
-			return $@"{this.path}{Path.DirectorySeparatorChar}moc";
+			return Path.Combine(this.dirFullName, "moc");
 		}
+
+		public void CreateNewNote(string name)
+		{
+			var fileNmae = $"{name}.md";
+			var fullName = Path.Combine(GetNoteDirectoryName(), fileNmae);
+			var file = new FileInfo(fullName);
+			if (file.Exists)
+			{
+				Logger.Warn($"{name} already exist in note folder.");
+				return;
+			}
+
+			FileUtil.SafeCreateFile(fullName);
+
+			using (var sw = new StreamWriter(fullName, append: false, Encoding.UTF8))
+			{
+				sw.WriteLine("tag: ");
+				sw.WriteLine();
+				sw.WriteLine($"# {name}");
+				sw.WriteLine();
+				sw.WriteLine();
+			}
+
+			var startInfo = new System.Diagnostics.ProcessStartInfo()
+			{
+				FileName = fullName,
+				UseShellExecute = true,
+				CreateNoWindow = true,
+			};
+			System.Diagnostics.Process.Start(startInfo);
+		}
+
+		public void OpenWorkspace()
+		{
+			var startInfo = new System.Diagnostics.ProcessStartInfo()
+			{
+				FileName = this.dirFullName,
+				UseShellExecute = true,
+				CreateNoWindow = true,
+			};
+			System.Diagnostics.Process.Start(startInfo);
+		}
+
 	}
 }

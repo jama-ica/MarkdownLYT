@@ -29,7 +29,7 @@ namespace MarkdownLYT
 				}
 			}
 
-			// Load workspace
+			// Check workspace settings
 			{
 				if (AppSettingFile.GetData().workspace.path == String.Empty)
 				{
@@ -46,20 +46,15 @@ namespace MarkdownLYT
 				}
 			}
 
+			// Load workspace
 			{
 				var workspacePath = AppSettingFile.GetData().workspace.path;
 				Logger.Info($@"Open workspace: {workspacePath}");
 				var workspace = new WorkSpace(workspacePath);
-				InitWorkspace(workspace);
+				workspace.Start();
 				InputCommand(workspace);
 			}
 			Environment.Exit(0);
-		}
-
-		static void InitWorkspace(WorkSpace workspace)
-		{
-			DirectoryUtil.SafeCreate(workspace.GetMocDirectoryName());
-			DirectoryUtil.SafeCreate(workspace.GetNoteDirectoryName());
 		}
 
 		static void InputWorkspacePath()
@@ -142,6 +137,14 @@ namespace MarkdownLYT
 				else if (command == E_COMMAND.BACKUP)
 				{
 					RunCommandBackup(workspace);
+				}
+				else if (command == E_COMMAND.CREATE_NOTE)
+				{
+					RunCommandCreateNote(workspace);
+				}
+				else if (command == E_COMMAND.OPEN_WORKSPACE)
+				{
+					RunCommandOpenWorkspace(workspace);
 				}
 				else
 				{
@@ -239,6 +242,25 @@ namespace MarkdownLYT
 			workspace.Backup(noteDirectoryName);
 
 			//TODO 全ファイルを note にコピーする
+		}
+
+		static void RunCommandCreateNote(WorkSpace workspace)
+		{
+			Logger.Info("Input file neme:");
+
+			string? input = Console.ReadLine();
+			if (input == null)
+			{
+				Logger.Warn("Invalid file name.");
+				return;
+			}
+
+			workspace.CreateNewNote(input);
+		}
+
+		static void RunCommandOpenWorkspace(WorkSpace workspace)
+		{
+			workspace.OpenWorkspace();
 		}
 	}
 }

@@ -3,44 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MarkdownLYT
 {
 	internal class WorkspaceSettingFile
 	{
-		public static readonly string fileName = "workspace_setting.dat";
+		public static readonly string FileFullname = "workspace_setting.dat";
 
-		static WorkspaceSettingFile? Instance = null;
-
+		string workspaceDirFullname;
 		WorkspaceSettingObj? dataObj;
 
-		private WorkspaceSettingFile()
+		public WorkspaceSettingFile()
 		{
+			this.workspaceDirFullname = string.Empty;
 			this.dataObj = null;
 		}
 
-		public static WorkspaceSettingFile GetInstance()
+		public bool Load(string workspaceDirFullname)
 		{
-			if (Instance == null)
-			{
-				Instance = new WorkspaceSettingFile();
-			}
-			return Instance;
-		}
+			this.workspaceDirFullname = workspaceDirFullname;
 
-		public static WorkspaceSettingObj? GetData()
-		{
-			return GetInstance().dataObj;
-		}
+			var fullname = GetFileFullname();
 
-		public bool Load()
-		{
-			if (!File.Exists(fileName))
+			if (!File.Exists(fullname))
 			{
-				return false;
+				FileUtil.SafeCreateFile(fullname);
+				var obj = CreateDefaultData();
+				Save(obj);
 			}
 
-			var text = File.ReadAllText(fileName);
+			var text = File.ReadAllText(fullname);
 			var deserializer = new YamlDotNet.Serialization.Deserializer();
 			this.dataObj = deserializer.Deserialize<WorkspaceSettingObj>(text);
 			return true;
@@ -59,7 +52,7 @@ namespace MarkdownLYT
 		public void Save(WorkspaceSettingObj data)
 		{
 			this.dataObj = data;
-			using TextWriter writer = File.CreateText(fileName);
+			using TextWriter writer = File.CreateText(GetFileFullname());
 			var serializer = new YamlDotNet.Serialization.Serializer();
 			serializer.Serialize(writer, data);
 		}
@@ -70,6 +63,20 @@ namespace MarkdownLYT
 			{
 			};
 			return data;
+		}
+
+		string GetFileFullname()
+		{
+			return GetFileFullname(this.workspaceDirFullname);
+		}
+
+		string GetFileFullname(string workspaceDirFullname)
+		{
+			if (workspaceDirFullname == string.Empty)
+			{
+				throw new Exception("workspaceDirFullname is Empty");
+			}
+			return Path.Combine(workspaceDirFullname, FileFullname);
 		}
 	}
 }

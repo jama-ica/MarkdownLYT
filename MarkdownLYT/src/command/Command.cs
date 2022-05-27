@@ -16,6 +16,8 @@ namespace MarkdownLYT
 		NEXT_MONTH,
 		BACKUP,
 		EXIT,
+		CREATE_NOTE,
+		OPEN_WORKSPACE,
 	};
 
 	public static class ExCommand
@@ -32,19 +34,23 @@ namespace MarkdownLYT
 			case E_COMMAND.MONTH:	return "month"; 
 			case E_COMMAND.NEXT_MONTH:	return "next month";
 			case E_COMMAND.BACKUP:	return "backup";
+			case E_COMMAND.CREATE_NOTE:	return "create new note";
+			case E_COMMAND.OPEN_WORKSPACE:	return "open workspace";
 				default:
 				throw new Exception("unknow command");
 			}
 		}
 
 		static string[] updateAliasNames = {"up"};
-		static string[] exitAliasNames = { "quit", "q" };
+		static string[] exitAliasNames = { "exit", "quit", "q" };
 		static string[] replaceAliasNames = { "rep", "re" };
 		static string[] mocAliasNames = { "moc" };
 		static string[] todayAliasNames = { "to" };
 		static string[] monthAliasNames = { "mo" };
 		static string[] nextMonthAliasNames = { "nmo", };
 		static string[] backupAliasNames = { "ba", "back", };
+		static string[] createNoteAliasNames = { "cre", "new", };
+		static string[] opneWorkspaceAliasNames = { "open", "op" };
 
 		public static string[] GetAliasNames(this E_COMMAND command)
 		{
@@ -58,6 +64,8 @@ namespace MarkdownLYT
 				case E_COMMAND.MONTH:	return monthAliasNames;
 				case E_COMMAND.NEXT_MONTH: return nextMonthAliasNames;
 				case E_COMMAND.BACKUP:	return backupAliasNames;
+				case E_COMMAND.CREATE_NOTE:	return createNoteAliasNames;
+				case E_COMMAND.OPEN_WORKSPACE:	return opneWorkspaceAliasNames;
 				default:
 					throw new Exception("unknow command");
 			}
@@ -75,6 +83,8 @@ namespace MarkdownLYT
 				case E_COMMAND.MONTH:	return "... Create notes for this month";
 				case E_COMMAND.NEXT_MONTH: return "... Create notes for next month";
 				case E_COMMAND.BACKUP:	return "... Create backup of all moc and notes";
+				case E_COMMAND.CREATE_NOTE:	return "... Create new note in note folder";
+				case E_COMMAND.OPEN_WORKSPACE:	return "... Open workspaenote folder";
 				default:
 					throw new Exception("unknow command");
 			}
