@@ -32,6 +32,7 @@ namespace MarkdownLYT
 
 			DirectoryUtil.SafeCreate(GetMocDirectoryName());
 			DirectoryUtil.SafeCreate(GetNoteDirectoryName());
+
 		}
 
 		public void Backup(string sourceDirName)
@@ -44,12 +45,27 @@ namespace MarkdownLYT
 
 		public void CleanUpMoc()
 		{
-			var mocDirectoryName = GetMocDirectoryName();
-			var fullnames = Directory.EnumerateFiles(mocDirectoryName, "*.md", SearchOption.AllDirectories);
-			foreach (string fullname in fullnames)
-			{
-				File.Delete(fullname);
-			}
+			var dirFullname = GetMocDirectoryName();
+			Directory.Delete(dirFullname, true);
+
+			//// delete all files
+			//var fileFullnames = Directory.EnumerateFiles(dirFullname, "*.md", SearchOption.AllDirectories);
+			//foreach (string fullname in fileFullnames)
+			//{
+			//	File.Delete(fullname);
+			//}
+
+
+			//// delete all dirs
+			//string[] directoryPaths = Directory.GetDirectories(dirFullname);
+			//foreach (string directoryPath in directoryPaths)
+			//{
+			//	Directory.Delete(directoryPath,);
+			//}
+
+			////中が空になったらディレクトリ自身も削除
+			//Directory.Delete(targetDirectoryPath, false);
+
 		}
 
 

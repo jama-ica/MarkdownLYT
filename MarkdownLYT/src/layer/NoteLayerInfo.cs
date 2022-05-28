@@ -21,13 +21,18 @@ namespace MarkdownLYT
 		public MocFile mocFile { get; }
 
 		// Constructor
-		public NoteLayerInfo(string path, string tagName, NoteLayerInfo? parent)
+		public NoteLayerInfo(string dirFullname, string tagName, NoteLayerInfo? parent)
 		{
 			this.tagName = tagName;
 			this.parent = parent;
 			this.chilidren = new List<NoteLayerInfo>();
 			this.notes = new List<NoteBook>();
-			this.mocFile = new MocFile(@$"{path}{Path.DirectorySeparatorChar}{tagName}.md");
+			this.mocFile = CreateMocFile(dirFullname, tagName);
+		}
+
+		public virtual MocFile CreateMocFile(string dirFullname, string tagName)
+		{
+			return new MocFile(Path.Combine(dirFullname, tagName, $"{tagName}.md"));
 		}
 
 		public virtual bool IsRoot()

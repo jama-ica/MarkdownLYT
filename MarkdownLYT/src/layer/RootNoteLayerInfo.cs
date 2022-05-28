@@ -12,16 +12,22 @@ namespace MarkdownLYT
 	internal class RootNoteLayerInfo : NoteLayerInfo
 	{
 		// Constructor
-		public RootNoteLayerInfo(string path)
-			: base(path, "Home", null)
+		public RootNoteLayerInfo(string dirFullname)
+			: base(dirFullname, "Home", null)
 		{
 		}
 
+
+		public override MocFile CreateMocFile(string dirFullname, string tagName)
+		{
+			return new MocFile(Path.Combine(dirFullname, $"{tagName}.md"));
+		}
+		
 		public override bool IsRoot()
 		{
 			return true;
 		}
-		
+
 		public void AddLayer(NoteBook note)
 		{
 			foreach (var tag in note.tags)

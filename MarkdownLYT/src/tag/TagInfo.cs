@@ -64,8 +64,6 @@ namespace MarkdownLYT.Tag
 		}
 
 
-
-
 		public bool Equals(TagInfo x, TagInfo y)
 		{
 			if (x == null || y == null)

@@ -12,7 +12,7 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Console.BackgroundColor = ConsoleColor.DarkCyan;
+			Console.BackgroundColor = ConsoleColor.DarkBlue;
 			Console.Clear();
 
 			Logger.Info("Markdown LYT");
@@ -105,22 +105,13 @@ namespace MarkdownLYT
 					Logger.Info("Unknown command");
 					continue;
 				}
-
-				if (command == E_COMMAND.UPDATE)
-				{
-					RunCommandUpdate(workspace);
-				}
 				else if (command == E_COMMAND.EXIT)
 				{
 					break;
 				}
-				else if (command == E_COMMAND.REPLACE)
-				{
-					RunCommandReplace();
-				}
 				else if (command == E_COMMAND.MOC)
 				{
-					RunCommandMOC();
+					RunCommandUpdate(workspace);
 				}
 				else if (command == E_COMMAND.TODAY)
 				{
@@ -133,10 +124,6 @@ namespace MarkdownLYT
 				else if (command == E_COMMAND.NEXT_MONTH)
 				{
 					RunCommandNextMonth();
-				}
-				else if (command == E_COMMAND.BACKUP)
-				{
-					RunCommandBackup(workspace);
 				}
 				else if (command == E_COMMAND.CREATE_NOTE)
 				{
@@ -178,16 +165,6 @@ namespace MarkdownLYT
 			workspace.UpdateAllNoteBooks();
 		}
 
-		static void RunCommandReplace()
-		{
-			//TODO
-		}
-
-		static void RunCommandMOC()
-		{
-			//TODO
-
-		}
 
 		static void RunCommandToday()
 		{

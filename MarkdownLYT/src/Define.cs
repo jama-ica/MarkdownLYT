@@ -9,7 +9,7 @@ namespace MarkdownLYT
 	internal class Define
 	{
 		public static readonly int MAJOR_VERSION = 0;
-		public static readonly int MINOR_VERSION = 3;
+		public static readonly int MINOR_VERSION = 4;
 		public static readonly int BUILD_VERSION = 0;
 
 		public static readonly int LEYER_TOP_LEVEL = 1;
