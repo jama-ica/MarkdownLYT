@@ -89,7 +89,7 @@ namespace MarkdownLYT
 
 			var sb = new StringBuilder();
 
-			// Add top lin
+			// Add top link
 			var relativePath = rootNoteLayer.mocFile.GetRelativePath(file.DirectoryName);
 			sb.Append($"[Home]({relativePath})");
 

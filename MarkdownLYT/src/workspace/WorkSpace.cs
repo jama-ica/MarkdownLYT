@@ -14,14 +14,14 @@ namespace MarkdownLYT
 		string dirFullName;
 
 		WorkspaceSettingFile? workspaceSetting;
-		List<NoteBook> noteBooks;
+		List<Notebook> noteBooks;
 		RootNoteLayerInfo? rootNoteLayer;
 
 		public WorkSpace(string dirFullName)
 		{
 			this.dirFullName = dirFullName;
 			this.workspaceSetting = null;
-			this.noteBooks = new List<NoteBook>();
+			this.noteBooks = new List<Notebook>();
 			this.rootNoteLayer = null;
 		}
 
@@ -102,7 +102,7 @@ namespace MarkdownLYT
 				//}
 				try
 				{
-					var notes = new NoteBook(fullname);
+					var notes = new Notebook(fullname);
 					notes.Load();
 					this.noteBooks.Add(notes);
 				}
@@ -140,7 +140,7 @@ namespace MarkdownLYT
 				throw new Exception("rootNoteLayer == null");
 			}
 			
-			var noTagNotes = new List<NoteBook>();
+			var noTagNotes = new List<Notebook>();
 			foreach(var note in noteBooks)
 			{
 				if(0 == note.tags.Count)
@@ -176,7 +176,7 @@ namespace MarkdownLYT
 			tagsFile.UpdateFile(tags);
 		}
 
-		public RootNoteLayerInfo CreateRootlTagLayer(List<NoteBook> notes)
+		public RootNoteLayerInfo CreateRootlTagLayer(List<Notebook> notes)
 		{
 			var rootTagLater = new RootNoteLayerInfo(GetMocDirectoryName());
 

@@ -12,8 +12,8 @@ namespace MarkdownLYT
 	{
 		static void Main(string[] args)
 		{
-			Console.BackgroundColor = ConsoleColor.DarkBlue;
-			Console.Clear();
+			//Console.BackgroundColor = ConsoleColor.DarkBlue;
+			//Console.Clear();
 
 			Logger.Info("Markdown LYT");
 			Logger.Info("- version: " + Define.MAJOR_VERSION + "." + Define.MINOR_VERSION + "." + Define.BUILD_VERSION );
@@ -82,16 +82,12 @@ namespace MarkdownLYT
 
 		static void InputCommand(WorkSpace workspace)
 		{
+			RunCommandHelp();
+
 			while (true)
 			{
 				Logger.Info("");
 				Logger.Info("Please input command");
-				foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
-				{
-					E_COMMAND cmd = (E_COMMAND)no;
-					Logger.Info($"  {String.Format("{0, -10}", cmd.GetName())} {cmd.GetDescription()}");
-				}
-				Logger.Info("");
 
 				string? text = Console.ReadLine();
 				if (text == null)
@@ -104,6 +100,10 @@ namespace MarkdownLYT
 				{
 					Logger.Info("Unknown command");
 					continue;
+				}
+				else if (command == E_COMMAND.HELP)
+				{
+					RunCommandHelp();
 				}
 				else if (command == E_COMMAND.EXIT)
 				{
@@ -138,6 +138,34 @@ namespace MarkdownLYT
 					Logger.Warn("Unknown command");
 				}
 			}
+		}
+
+		static void RunCommandHelp()
+		{
+			Logger.Info("");
+			Logger.Info("Commands:");
+
+			var sb = new StringBuilder();
+
+			foreach (int no in Enum.GetValues(typeof(E_COMMAND)))
+			{
+				E_COMMAND cmd = (E_COMMAND)no;
+				sb.Clear();
+				sb.Append(cmd.GetName());
+				sb.Append(" | ");
+				int i = 0;
+				foreach (var aliase in cmd.GetAliasNames())
+				{
+					sb.Append(aliase);
+					i++;
+					if(i < cmd.GetAliasNames().Length)
+					{
+						sb.Append(" | ");
+					}
+				}
+				Logger.Info($"  {String.Format("{0, -12}", sb.ToString())} {cmd.GetDescription()}");
+			}
+			Logger.Info("");
 		}
 
 		static void RunCommandUpdate(WorkSpace workspace)

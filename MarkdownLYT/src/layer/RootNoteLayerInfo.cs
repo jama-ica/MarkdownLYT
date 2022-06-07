@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using MarkdownLYT.Note;
 using MarkdownLYT.Tag;
+using System.IO;
 
 namespace MarkdownLYT
 {
@@ -28,7 +29,7 @@ namespace MarkdownLYT
 			return true;
 		}
 
-		public void AddLayer(NoteBook note)
+		public void AddLayer(Notebook note)
 		{
 			foreach (var tag in note.tags)
 			{

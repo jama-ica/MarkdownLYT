@@ -16,7 +16,7 @@ namespace MarkdownLYT.Note
 		{
 		}
 
-		public void UpdateFile(RootNoteLayerInfo rootTagLayer, List<NoteBook> noTagNotes)
+		public void UpdateFile(RootNoteLayerInfo rootTagLayer, List<Notebook> noTagNotes)
 		{
 
 			if (!File.Exists(this.file.FullName))
@@ -27,7 +27,7 @@ namespace MarkdownLYT.Note
 			using (var sw = new StreamWriter(this.file.FullName, append:false, Encoding.UTF8))
 			{
 				// add title
-				sw.WriteLine("# Home");
+				sw.WriteLine("# MOC - Home");
 				sw.WriteLine();
 
 				// add moc link

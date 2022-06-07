@@ -8,11 +8,11 @@ using MarkdownLYT.Tag;
 
 namespace MarkdownLYT.Note
 {
-	class NoteBook : BaseNote
+	class Notebook : BaseNote
 	{
 		public List<TagInfo> tags { get; }
 
-		public NoteBook(string path)
+		public Notebook(string path)
 			: base(path)
 		{
 			this.tags = new List<TagInfo>();

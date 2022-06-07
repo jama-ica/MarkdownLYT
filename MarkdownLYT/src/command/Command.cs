@@ -8,11 +8,12 @@ namespace MarkdownLYT
 {
 	public enum E_COMMAND
 	{
+		HELP,
+		EXIT,
 		MOC,
 		TODAY,
 		MONTH,
 		NEXT_MONTH,
-		EXIT,
 		CREATE_NOTE,
 		OPEN_WORKSPACE,
 	};
@@ -23,7 +24,8 @@ namespace MarkdownLYT
 		{
 			switch (command)
 			{
-			case E_COMMAND.EXIT:	return "exit"; 
+			case E_COMMAND.HELP:	return "help"; 
+			case E_COMMAND.EXIT:	return "exit";
 			case E_COMMAND.MOC:		return "moc"; 
 			case E_COMMAND.TODAY:	return "today"; 
 			case E_COMMAND.MONTH:	return "month"; 
@@ -35,7 +37,8 @@ namespace MarkdownLYT
 			}
 		}
 
-		static string[] exitAliasNames = { "exit", "quit", "q" };
+		static string[] helpAliasNames = { "h" };
+		static string[] exitAliasNames = { "quit", "q" };
 		static string[] mocAliasNames = { "up", "moc" };
 		static string[] todayAliasNames = { "to" };
 		static string[] monthAliasNames = { "mo" };
@@ -47,6 +50,7 @@ namespace MarkdownLYT
 		{
 			switch (command)
 			{
+				case E_COMMAND.HELP:	return helpAliasNames;
 				case E_COMMAND.EXIT:	return exitAliasNames;
 				case E_COMMAND.MOC:		return mocAliasNames;
 				case E_COMMAND.TODAY:	return todayAliasNames;
@@ -63,6 +67,7 @@ namespace MarkdownLYT
 		{
 			switch (command)
 			{
+				case E_COMMAND.HELP:	return "... Show help";
 				case E_COMMAND.EXIT:	return "... Quit this app";
 				case E_COMMAND.MOC:		return "... Update home & moc";
 				case E_COMMAND.TODAY:	return "... Create or open today note";

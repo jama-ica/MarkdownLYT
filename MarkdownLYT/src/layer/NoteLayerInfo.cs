@@ -16,7 +16,7 @@ namespace MarkdownLYT
 		public NoteLayerInfo? parent { get; }
 		public List<NoteLayerInfo> chilidren { get; }
 
-		public List<NoteBook> notes { get; }
+		public List<Notebook> notes { get; }
 
 		public MocFile mocFile { get; }
 
@@ -26,7 +26,7 @@ namespace MarkdownLYT
 			this.tagName = tagName;
 			this.parent = parent;
 			this.chilidren = new List<NoteLayerInfo>();
-			this.notes = new List<NoteBook>();
+			this.notes = new List<Notebook>();
 			this.mocFile = CreateMocFile(dirFullname, tagName);
 		}
 
@@ -40,7 +40,7 @@ namespace MarkdownLYT
 			return false;
 		}
 
-		public void AddLayer(string tagText, NoteBook note)
+		public void AddLayer(string tagText, Notebook note)
 		{
 			string[] layers = TagPath.GetLayers(tagText);
 
@@ -79,7 +79,7 @@ namespace MarkdownLYT
 			this.chilidren.Add(noteLayer);
 		}
 
-		void AddNote(NoteBook note)
+		void AddNote(Notebook note)
 		{
 			this.notes.Add(note);
 		}

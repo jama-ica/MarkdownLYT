@@ -31,7 +31,7 @@ namespace MarkdownLYT.Note
 				sw.WriteLine();
 
 				// add title
-				sw.WriteLine($"# {noteLayer.tagName}");
+				sw.WriteLine($"# MOC - {noteLayer.tagName}");
 				sw.WriteLine();
 
 				// add moc link
