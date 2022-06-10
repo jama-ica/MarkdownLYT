@@ -35,37 +35,10 @@ namespace MarkdownLYT
 
 		}
 
-		public void Backup(string sourceDirName)
-		{
-			var today = DateTime.Now;
-			var newDirectoryName = @$"{this.dirFullName}{Path.DirectorySeparatorChar}note_{today.ToString("yyyyMMdd_HHmmss")}";
-			DirectoryUtil.SafeCopyTo(sourceDirName, newDirectoryName);
-		}
-
-
 		public void CleanUpMoc()
 		{
 			var dirFullname = GetMocDirectoryName();
 			Directory.Delete(dirFullname, true);
-
-			//// delete all files
-			//var fileFullnames = Directory.EnumerateFiles(dirFullname, "*.md", SearchOption.AllDirectories);
-			//foreach (string fullname in fileFullnames)
-			//{
-			//	File.Delete(fullname);
-			//}
-
-
-			//// delete all dirs
-			//string[] directoryPaths = Directory.GetDirectories(dirFullname);
-			//foreach (string directoryPath in directoryPaths)
-			//{
-			//	Directory.Delete(directoryPath,);
-			//}
-
-			////中が空になったらディレクトリ自身も削除
-			//Directory.Delete(targetDirectoryPath, false);
-
 		}
 
 
@@ -84,22 +57,6 @@ namespace MarkdownLYT
 			var fullnames = Directory.EnumerateFiles(directoryName, "*.md", SearchOption.AllDirectories);
 			foreach (string fullname in fullnames)
 			{
-				//if (DiaryNote.IsDiaryFile(fullname))
-				//{
-				//	continue;
-				//}
-				//if (MocFile.IsMocFile(fullname))
-				//{
-				//	continue;
-				//}
-				//if (HomeFile.IsHome(fullname))
-				//{
-				//	continue;
-				//}
-				//if (TagsFile.IsTagsFile(fullname))
-				//{
-				//	continue;
-				//}
 				try
 				{
 					var notes = new Notebook(fullname);
@@ -149,13 +106,18 @@ namespace MarkdownLYT
 				}
 			}
 
+			// Home
 			var homeFile = new HomeFile(this.rootNoteLayer.mocFile.GetFullName());
 			homeFile.UpdateFile(this.rootNoteLayer, noTagNotes);
 
+			// Mocs
 			foreach (var childLayer in this.rootNoteLayer.chilidren)
 			{
 				UpdateMocFiles(childLayer);
 			}
+
+			// Tags
+			UpdateAllTagNote();
 		}
 
 		void UpdateMocFiles(NoteLayerInfo noteLayer)
@@ -167,6 +129,13 @@ namespace MarkdownLYT
 			{
 				UpdateMocFiles(child);
 			}
+		}
+
+		public void UpdateAllTagNote()
+		{
+			string fileFullName = AllTagNote.GetFileFullName(GetMocDirectoryName());
+			var allTagsNote = new AllTagNote(fileFullName);
+			allTagsNote.UpdateFile(this.rootNoteLayer);
 		}
 
 		public void UpdateTagFile()
@@ -223,35 +192,9 @@ namespace MarkdownLYT
 			return Path.Combine(this.dirFullName, "moc");
 		}
 
-		public void CreateNewNote(string name)
+		public string CreateNewNote(string name)
 		{
-			var fileNmae = $"{name}.md";
-			var fullName = Path.Combine(GetNoteDirectoryName(), fileNmae);
-			var file = new FileInfo(fullName);
-			if (file.Exists)
-			{
-				Logger.Warn($"{name} already exist in note folder.");
-				return;
-			}
-
-			FileUtil.SafeCreateFile(fullName);
-
-			using (var sw = new StreamWriter(fullName, append: false, Encoding.UTF8))
-			{
-				sw.WriteLine("tag: ");
-				sw.WriteLine();
-				sw.WriteLine($"# {name}");
-				sw.WriteLine();
-				sw.WriteLine();
-			}
-
-			var startInfo = new System.Diagnostics.ProcessStartInfo()
-			{
-				FileName = fullName,
-				UseShellExecute = true,
-				CreateNoWindow = true,
-			};
-			System.Diagnostics.Process.Start(startInfo);
+			return Notebook.Create(GetNoteDirectoryName(), name);
 		}
 
 		public void OpenWorkspace()

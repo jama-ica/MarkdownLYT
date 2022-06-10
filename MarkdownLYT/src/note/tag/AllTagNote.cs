@@ -9,7 +9,12 @@ namespace MarkdownLYT.Note
 {
 	class AllTagNote : BaseNote
 	{
+		public static string GetFileFullName(string dirName)
+		{
+			return Path.Combine(dirName, "AllTags.md");
+		}
 
+		// Constructor
 		public AllTagNote(string path)
 			: base(path)
 		{
@@ -17,7 +22,6 @@ namespace MarkdownLYT.Note
 
 		public void UpdateFile(RootNoteLayerInfo rootNoteLayer)
 		{
-
 			if (!this.file.Exists)
 			{
 				FileUtil.SafeCreateFile(GetFullName());
@@ -25,18 +29,20 @@ namespace MarkdownLYT.Note
 
 			using (var sw = new StreamWriter(GetFullName(), append: false, Encoding.UTF8))
 			{
-				foreach (var child in rootNoteLayer.chilidren)
-				{
-				}
+				AppendTagLink(sw, rootNoteLayer);
 			}
 		}
 
-		void WriteLinkToTag(StreamWriter sw, NoteLayerInfo noteLayer, int layerLevel)
+		void AppendTagLink(StreamWriter sw, NoteLayerInfo noteLayer)
 		{
-			sw.WriteLine(noteLayer.tagName);
-			//TODO
+			foreach (var child in noteLayer.chilidren)
+			{
+				var tagFullName = child.GetFullTagName();
+				var relativePath = child.mocFile.GetRelativePath(GetDirectoryName());
+				sw.WriteLine($"[{tagFullName}]({relativePath})");
+
+				AppendTagLink(sw, child);
+			}
 		}
-
-
 	}
 }

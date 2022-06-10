@@ -84,14 +84,29 @@ namespace MarkdownLYT
 			this.notes.Add(note);
 		}
 
-		public void GetAllTags(List<string> allTags)
+		public void GetAllTags(ref List<string> allTags)
 		{
 			allTags.Add(tagName);
 
 			foreach (var child in chilidren)
 			{
-				child.GetAllTags(allTags);
+				child.GetAllTags(ref allTags);
 			}
+		}
+
+		public string GetFullTagName()
+		{
+			var sb = new StringBuilder();
+			sb.Append(this.tagName);
+
+			var p = this.parent;
+			while (p != null && !p.IsRoot())
+			{
+				sb.Insert(0, $"{p.tagName} / ");
+				p = p.parent;
+			}
+
+			return sb.ToString();
 		}
 
 		public NoteLayerInfo? FindChildNoteLayer(string tagName)

@@ -43,7 +43,7 @@ namespace MarkdownLYT
 
 			foreach (var child in chilidren)
 			{
-				child.GetAllTags(allTags);
+				child.GetAllTags(ref allTags);
 			}
 
 			return allTags;

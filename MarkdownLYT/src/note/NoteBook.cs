@@ -10,6 +10,31 @@ namespace MarkdownLYT.Note
 {
 	class Notebook : BaseNote
 	{
+		public static string Create(string noteDirName, string name)
+		{
+			var fileNmae = $"{name}.md";
+			var fullName = Path.Combine(noteDirName, fileNmae);
+			var file = new FileInfo(fullName);
+			if (file.Exists)
+			{
+				Logger.Warn($"{name} already exist in note folder.");
+				return fullName;
+			}
+
+			FileUtil.SafeCreateFile(fullName);
+
+			using (var sw = new StreamWriter(fullName, append: false, Encoding.UTF8))
+			{
+				sw.WriteLine("tag: ");
+				sw.WriteLine();
+				sw.WriteLine($"# {name}");
+				sw.WriteLine();
+				sw.WriteLine();
+			}
+
+			return fullName;
+		}
+
 		public List<TagInfo> tags { get; }
 
 		public Notebook(string path)

@@ -9,29 +9,29 @@ namespace MarkdownLYT.Note
 {
 	internal class DiaryNote
 	{
-		public static void Create(DateTime dateTime)
-		{
-			var fullname = GetFileFullName(dateTime);
-			if (File.Exists(fullname))
-			{
-				return;
-			}
-			FileUtil.SafeCreateFile(fullname);
-		}
-
-		public static void Open(DateTime dateTime)
+		public static string Create(DateTime dateTime)
 		{
 			var fullname = GetFileFullName(dateTime);
 			if (!File.Exists(fullname))
 			{
-				Logger.Error($"file {fullname} is not found");
-				return;
+				FileUtil.SafeCreateFile(fullname);
 			}
-			var proc = new System.Diagnostics.Process();
-			proc.StartInfo.FileName = fullname;
-			proc.StartInfo.UseShellExecute = true;
-			proc.Start();
+			return fullname;
 		}
+
+		//public static void Open(DateTime dateTime)
+		//{
+		//	var fullname = GetFileFullName(dateTime);
+		//	if (!File.Exists(fullname))
+		//	{
+		//		Logger.Error($"file {fullname} is not found");
+		//		return;
+		//	}
+		//	var proc = new System.Diagnostics.Process();
+		//	proc.StartInfo.FileName = fullname;
+		//	proc.StartInfo.UseShellExecute = true;
+		//	proc.Start();
+		//}
 
 		static string GetFileFullName(DateTime dateTime)
 		{

@@ -196,8 +196,9 @@ namespace MarkdownLYT
 
 		static void RunCommandToday()
 		{
-			DiaryNote.Create(DateTime.Today);
+			var fileFullname = DiaryNote.Create(DateTime.Today);
 			//DiaryNote.Open(DateTime.Today);
+			OpenFile(fileFullname);
 		}
 
 		static void RunCommandMonth()
@@ -241,14 +242,6 @@ namespace MarkdownLYT
 			}
 		}
 
-		static void RunCommandBackup(WorkSpace workspace)
-		{
-			var noteDirectoryName = workspace.GetNoteDirectoryName();
-			workspace.Backup(noteDirectoryName);
-
-			//TODO 全ファイルを note にコピーする
-		}
-
 		static void RunCommandCreateNote(WorkSpace workspace)
 		{
 			Logger.Info("Input file neme:");
@@ -260,12 +253,24 @@ namespace MarkdownLYT
 				return;
 			}
 
-			workspace.CreateNewNote(input);
+			var fileFullname = workspace.CreateNewNote(input);
+			OpenFile(fileFullname);
 		}
 
 		static void RunCommandOpenWorkspace(WorkSpace workspace)
 		{
 			workspace.OpenWorkspace();
+		}
+
+		static void OpenFile(string fileFullname)
+		{
+			var startInfo = new System.Diagnostics.ProcessStartInfo()
+			{
+				FileName = fileFullname,
+				UseShellExecute = true,
+				CreateNoWindow = true,
+			};
+			System.Diagnostics.Process.Start(startInfo);
 		}
 	}
 }
